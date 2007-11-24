@@ -83,7 +83,7 @@
       $event= Event::getByEvent_id($request->getParam('event_id'));
       $deadline_date= $event->getDeadline();
       $target_date= $event->getTarget_date();
-      if ((($daedline_date && $deadline_date->isBefore(Date::now())) || $target_date->isBefore(Date::now())) && !$context->hasPermission('create_event')) {
+      if ((($deadline_date && $deadline_date->isBefore(Date::now())) || $target_date->isBefore(Date::now())) && !$context->hasPermission('create_event')) {
         $this->addError('date_expired', '*');
         return FALSE;
       }

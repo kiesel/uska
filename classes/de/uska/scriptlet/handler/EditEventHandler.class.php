@@ -127,28 +127,27 @@
       $event->setLastchange(Date::now());
       
       $targetdate= $this->wrapper->getTarget_date();
-      $deadline= $this->wrapper->getDeadline_date();
-      
       list($th, $tm)= preg_split('/[:\.\-]/', $this->wrapper->getTarget_time(), 2);
-      $targetdate= new Date(Date::mktime(
-        $th,
-        $tm,
-        0,
+      $targetdate= Date::create(
+        $targetdate->getYear(),
         $targetdate->getMonth(),
         $targetdate->getDay(),
-        $targetdate->getYear()
-      ));
-      
-      if ($deadline) {
+        $th,
+        $tm,
+        0
+      );
+        
+      $deadline= $this->wrapper->getDeadline_date();
+      if ($deadline instanceof Date) {
         list($dh, $dm)= preg_split('/[:\.\-]/', $this->wrapper->getDeadline_time(), 2);
-        $deadline= new Date(Date::mktime(
-          $dh,
-          $dm,
-          0,
+        $deadline= Date::create(
+          $deadline->getYear(),
           $deadline->getMonth(),
           $deadline->getDay(),
-          $deadline->getYear()
-        ));
+          $dh,
+          $dm,
+          0
+        );
       }
       
       // Check order of dates. Now < deadline < target_date
