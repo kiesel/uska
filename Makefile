@@ -2,12 +2,12 @@
 #
 # $Id$ 
 
-BASE=../../..
 WRAPPER_PHP=../../../classes/de/uska/scriptlet/wrapper
+PROJECT_DEPENDENCIES=xp-rt-5.6.2.xar
 
-.PHONY: wrapper
+include ../../Mk/common.mk
+include ../../Mk/dist.mk
 
-include ../../../xp.port.mk
 
 dbclasses:
 	for i in `ls -1 doc/dbxml/*.xml`; do \
