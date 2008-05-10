@@ -191,7 +191,7 @@ a.main_nav_active_item:link, a.main_nav_active_item:visited {
 /*--- subnavigation items --------------------------------------------------*/
 
 #sub_nav_list a {
-	font-family: Tahoma,Verdana, Arial, sans-serif;
+	font-family: Tahoma,Verdana,Arial, sans-serif;
 	font-weight : bold;
 	text-decoration: none;
 	text-align: left;
@@ -205,10 +205,9 @@ a.main_nav_active_item:link, a.main_nav_active_item:visited {
 	width: 132px;
 }
 
-html>body #sub_nav_list a {
+html>body #sub_nav_list a,span {
   	width: 132px;
 }
-
 
 #sub_nav_list a:link {
 	text-decoration: none;
@@ -320,8 +319,9 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: Tahoma,Verdana, Arial, sans-serif;
-	font-size: x-small; /* IE5 Win */
-	font-size: small;
+	/* font-size: x-small; */ /* IE5 Win */
+	/* font-size: small; */
+    font-size: 12px;
 	text-align: left;
 }
 
