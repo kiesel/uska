@@ -1,14 +1,14 @@
 <?php
 /* This class is part of the XP framework
  *
- * $Id: xp5.php.xsl 10645 2007-06-21 12:41:53Z ruben $
+ * $Id: xp5.php.xsl 11772 2008-02-25 17:05:34Z ruben $
  */
  
   uses('rdbms.DataSet', 'util.HashmapIterator');
 
   /**
    * Class wrapper for table event_attendee, database uska
-   * (Auto-generated on Sat, 23 Jun 2007 16:52:12 +0200 by Alex)
+   * (This class was auto-generated, so please do not change manually)
    *
    * @purpose  Datasource accessor
    */
@@ -20,7 +20,8 @@
       $needs_driver       = 0,
       $lastchange         = NULL,
       $changedby          = '',
-      $attend             = 0;
+      $attend             = 0,
+      $fetch_key          = 0;
   
     protected
       $cache= array(
@@ -40,7 +41,8 @@
           'needs_driver'        => array('%d', FieldType::INT, FALSE),
           'lastchange'          => array('%s', FieldType::DATETIME, FALSE),
           'changedby'           => array('%s', FieldType::VARCHAR, FALSE),
-          'attend'              => array('%d', FieldType::INT, FALSE)
+          'attend'              => array('%d', FieldType::INT, FALSE),
+          'fetch_key'           => array('%d', FieldType::INT, FALSE)
         ));
         $peer->setRelations(array(
           'Event' => array(
@@ -73,7 +75,7 @@
      *
      * @param   string name
      * @return  rdbms.Column
-     * @throws  lang.IllegalArumentException
+     * @throws  lang.IllegalArgumentException
      */
     public static function column($name) {
       return Peer::forName(__CLASS__)->column($name);
@@ -84,7 +86,7 @@
      * 
      * @param   int event_id
      * @param   int player_id
-     * @return  de.uska.db.Event_attendee entitiy object
+     * @return  de.uska.db.Event_attendee entity object
      * @throws  rdbms.SQLException in case an error occurs
      */
     public static function getByEvent_idPlayer_id($event_id, $player_id) {
@@ -251,71 +253,60 @@
     }
 
     /**
-     * Retrieves an array of all Event entities
+     * Retrieves fetch_key
+     *
+     * @return  int
+     */
+    public function getFetch_key() {
+      return $this->fetch_key;
+    }
+      
+    /**
+     * Sets fetch_key
+     *
+     * @param   int fetch_key
+     * @return  int the previous value
+     */
+    public function setFetch_key($fetch_key) {
+      return $this->_change('fetch_key', $fetch_key);
+    }
+
+    /**
+     * Retrieves the Event entity
      * referenced by event_id=>event_id
      *
-     * @return  de.uska.db.Event[] entities
+     * @return  de.uska.db.Event entity
      * @throws  rdbms.SQLException in case an error occurs
      */
-    public function getEventList() {
-      if ($this->cached['Event']) return array_values($this->cache['Event']);
-      return XPClass::forName('de.uska.db.Event')
-        ->getMethod('getPeer')
-        ->invoke()
-        ->doSelect(new Criteria(
-        array('event_id', $this->getEvent_id(), EQUAL)
+    public function getEvent() {
+      $r= ($this->cached['Event']) ?
+        array_values($this->cache['Event']) :
+        XPClass::forName('de.uska.db.Event')
+          ->getMethod('getPeer')
+          ->invoke(NULL)
+          ->doSelect(new Criteria(
+          array('event_id', $this->getEvent_id(), EQUAL)
       ));
+      return $r ? $r[0] : NULL;
     }
 
     /**
-     * Retrieves an iterator for all Event entities
-     * referenced by event_id=>event_id
-     *
-     * @return  rdbms.ResultIterator<de.uska.db.Event
-     * @throws  rdbms.SQLException in case an error occurs
-     */
-    public function getEventIterator() {
-      if ($this->cached['Event']) return new HashmapIterator($this->cache['Event']);
-      return XPClass::forName('de.uska.db.Event')
-        ->getMethod('getPeer')
-        ->invoke()
-        ->iteratorFor(new Criteria(
-        array('event_id', $this->getEvent_id(), EQUAL)
-      ));
-    }
-
-    /**
-     * Retrieves an array of all Player entities
+     * Retrieves the Player entity
      * referenced by player_id=>player_id
      *
-     * @return  de.uska.db.Player[] entities
+     * @return  de.uska.db.Player entity
      * @throws  rdbms.SQLException in case an error occurs
      */
-    public function getPlayerList() {
-      if ($this->cached['Player']) return array_values($this->cache['Player']);
-      return XPClass::forName('de.uska.db.Player')
-        ->getMethod('getPeer')
-        ->invoke()
-        ->doSelect(new Criteria(
-        array('player_id', $this->getPlayer_id(), EQUAL)
+    public function getPlayer() {
+      $r= ($this->cached['Player']) ?
+        array_values($this->cache['Player']) :
+        XPClass::forName('de.uska.db.Player')
+          ->getMethod('getPeer')
+          ->invoke(NULL)
+          ->doSelect(new Criteria(
+          array('player_id', $this->getPlayer_id(), EQUAL)
       ));
-    }
-
-    /**
-     * Retrieves an iterator for all Player entities
-     * referenced by player_id=>player_id
-     *
-     * @return  rdbms.ResultIterator<de.uska.db.Player
-     * @throws  rdbms.SQLException in case an error occurs
-     */
-    public function getPlayerIterator() {
-      if ($this->cached['Player']) return new HashmapIterator($this->cache['Player']);
-      return XPClass::forName('de.uska.db.Player')
-        ->getMethod('getPeer')
-        ->invoke()
-        ->iteratorFor(new Criteria(
-        array('player_id', $this->getPlayer_id(), EQUAL)
-      ));
+      return $r ? $r[0] : NULL;
     }
   }
 ?>

@@ -8,7 +8,7 @@
 
   /**
    * Class wrapper for table event, database uska
-   * (Auto-generated on Sat, 23 Jun 2007 16:52:12 +0200 by Alex)
+   * (This class was auto-generated, so please do not change manually)
    *
    * @purpose  Datasource accessor
    */
@@ -31,6 +31,9 @@
       $cache= array(
         'Team' => array(),
         'Event_type' => array(),
+        'Event_attendeeEvent' => array(),
+        'Event_pointsEvent' => array(),
+        'Event_type_aclEvent_type' => array(),
       );
 
     static function __static() { 
@@ -66,6 +69,24 @@
               'event_type_id' => 'event_type_id',
             ),
           ),
+          'Event_attendeeEvent' => array(
+            'classname' => 'de.uska.db.Event_attendee',
+            'key'       => array(
+              'event_id' => 'event_id',
+            ),
+          ),
+          'Event_pointsEvent' => array(
+            'classname' => 'de.uska.db.Event_points',
+            'key'       => array(
+              'event_id' => 'event_id',
+            ),
+          ),
+          'Event_type_aclEvent_type' => array(
+            'classname' => 'de.uska.db.Event_type_acl',
+            'key'       => array(
+              'event_type_id' => 'event_type_id',
+            ),
+          ),
         ));
       }
     }  
@@ -84,7 +105,7 @@
      *
      * @param   string name
      * @return  rdbms.Column
-     * @throws  lang.IllegalArumentException
+     * @throws  lang.IllegalArgumentException
      */
     public static function column($name) {
       return Peer::forName(__CLASS__)->column($name);
@@ -94,7 +115,7 @@
      * Gets an instance of this object by index "PRIMARY"
      * 
      * @param   int event_id
-     * @return  de.uska.db.Event entitiy object
+     * @return  de.uska.db.Event entity object
      * @throws  rdbms.SQLException in case an error occurs
      */
     public static function getByEvent_id($event_id) {
@@ -364,70 +385,142 @@
     }
 
     /**
-     * Retrieves an array of all Team entities
+     * Retrieves the Team entity
      * referenced by team_id=>team_id
      *
-     * @return  de.uska.db.Team[] entities
+     * @return  de.uska.db.Team entity
      * @throws  rdbms.SQLException in case an error occurs
      */
-    public function getTeamList() {
-      if ($this->cached['Team']) return array_values($this->cache['Team']);
-      return XPClass::forName('de.uska.db.Team')
-        ->getMethod('getPeer')
-        ->invoke()
-        ->doSelect(new Criteria(
-        array('team_id', $this->getTeam_id(), EQUAL)
+    public function getTeam() {
+      $r= ($this->cached['Team']) ?
+        array_values($this->cache['Team']) :
+        XPClass::forName('de.uska.db.Team')
+          ->getMethod('getPeer')
+          ->invoke(NULL)
+          ->doSelect(new Criteria(
+          array('team_id', $this->getTeam_id(), EQUAL)
       ));
+      return $r ? $r[0] : NULL;
     }
 
     /**
-     * Retrieves an iterator for all Team entities
-     * referenced by team_id=>team_id
-     *
-     * @return  rdbms.ResultIterator<de.uska.db.Team
-     * @throws  rdbms.SQLException in case an error occurs
-     */
-    public function getTeamIterator() {
-      if ($this->cached['Team']) return new HashmapIterator($this->cache['Team']);
-      return XPClass::forName('de.uska.db.Team')
-        ->getMethod('getPeer')
-        ->invoke()
-        ->iteratorFor(new Criteria(
-        array('team_id', $this->getTeam_id(), EQUAL)
-      ));
-    }
-
-    /**
-     * Retrieves an array of all Event_type entities
+     * Retrieves the Event_type entity
      * referenced by event_type_id=>event_type_id
      *
-     * @return  de.uska.db.Event_type[] entities
+     * @return  de.uska.db.Event_type entity
      * @throws  rdbms.SQLException in case an error occurs
      */
-    public function getEvent_typeList() {
-      if ($this->cached['Event_type']) return array_values($this->cache['Event_type']);
-      return XPClass::forName('de.uska.db.Event_type')
+    public function getEvent_type() {
+      $r= ($this->cached['Event_type']) ?
+        array_values($this->cache['Event_type']) :
+        XPClass::forName('de.uska.db.Event_type')
+          ->getMethod('getPeer')
+          ->invoke(NULL)
+          ->doSelect(new Criteria(
+          array('event_type_id', $this->getEvent_type_id(), EQUAL)
+      ));
+      return $r ? $r[0] : NULL;
+    }
+
+    /**
+     * Retrieves an array of all Event_attendee entities referencing
+     * this entity by event_id=>event_id
+     *
+     * @return  de.uska.db.Event_attendee[] entities
+     * @throws  rdbms.SQLException in case an error occurs
+     */
+    public function getEvent_attendeeEventList() {
+      if ($this->cached['Event_attendeeEvent']) return array_values($this->cache['Event_attendeeEvent']);
+      return XPClass::forName('de.uska.db.Event_attendee')
         ->getMethod('getPeer')
-        ->invoke()
+        ->invoke(NULL)
         ->doSelect(new Criteria(
-        array('event_type_id', $this->getEvent_type_id(), EQUAL)
+          array('event_id', $this->getEvent_id(), EQUAL)
       ));
     }
 
     /**
-     * Retrieves an iterator for all Event_type entities
-     * referenced by event_type_id=>event_type_id
+     * Retrieves an iterator for all Event_attendee entities referencing
+     * this entity by event_id=>event_id
      *
-     * @return  rdbms.ResultIterator<de.uska.db.Event_type
+     * @return  rdbms.ResultIterator<de.uska.db.Event_attendee>
      * @throws  rdbms.SQLException in case an error occurs
      */
-    public function getEvent_typeIterator() {
-      if ($this->cached['Event_type']) return new HashmapIterator($this->cache['Event_type']);
-      return XPClass::forName('de.uska.db.Event_type')
+    public function getEvent_attendeeEventIterator() {
+      if ($this->cached['Event_attendeeEvent']) return new HashmapIterator($this->cache['Event_attendeeEvent']);
+      return XPClass::forName('de.uska.db.Event_attendee')
         ->getMethod('getPeer')
-        ->invoke()
+        ->invoke(NULL)
         ->iteratorFor(new Criteria(
-        array('event_type_id', $this->getEvent_type_id(), EQUAL)
+          array('event_id', $this->getEvent_id(), EQUAL)
+      ));
+    }
+
+    /**
+     * Retrieves an array of all Event_points entities referencing
+     * this entity by event_id=>event_id
+     *
+     * @return  de.uska.db.Event_points[] entities
+     * @throws  rdbms.SQLException in case an error occurs
+     */
+    public function getEvent_pointsEventList() {
+      if ($this->cached['Event_pointsEvent']) return array_values($this->cache['Event_pointsEvent']);
+      return XPClass::forName('de.uska.db.Event_points')
+        ->getMethod('getPeer')
+        ->invoke(NULL)
+        ->doSelect(new Criteria(
+          array('event_id', $this->getEvent_id(), EQUAL)
+      ));
+    }
+
+    /**
+     * Retrieves an iterator for all Event_points entities referencing
+     * this entity by event_id=>event_id
+     *
+     * @return  rdbms.ResultIterator<de.uska.db.Event_points>
+     * @throws  rdbms.SQLException in case an error occurs
+     */
+    public function getEvent_pointsEventIterator() {
+      if ($this->cached['Event_pointsEvent']) return new HashmapIterator($this->cache['Event_pointsEvent']);
+      return XPClass::forName('de.uska.db.Event_points')
+        ->getMethod('getPeer')
+        ->invoke(NULL)
+        ->iteratorFor(new Criteria(
+          array('event_id', $this->getEvent_id(), EQUAL)
+      ));
+    }
+
+    /**
+     * Retrieves an array of all Event_type_acl entities referencing
+     * this entity by event_type_id=>event_type_id
+     *
+     * @return  de.uska.db.Event_type_acl[] entities
+     * @throws  rdbms.SQLException in case an error occurs
+     */
+    public function getEvent_type_aclEvent_typeList() {
+      if ($this->cached['Event_type_aclEvent_type']) return array_values($this->cache['Event_type_aclEvent_type']);
+      return XPClass::forName('de.uska.db.Event_type_acl')
+        ->getMethod('getPeer')
+        ->invoke(NULL)
+        ->doSelect(new Criteria(
+          array('event_type_id', $this->getEvent_type_id(), EQUAL)
+      ));
+    }
+
+    /**
+     * Retrieves an iterator for all Event_type_acl entities referencing
+     * this entity by event_type_id=>event_type_id
+     *
+     * @return  rdbms.ResultIterator<de.uska.db.Event_type_acl>
+     * @throws  rdbms.SQLException in case an error occurs
+     */
+    public function getEvent_type_aclEvent_typeIterator() {
+      if ($this->cached['Event_type_aclEvent_type']) return new HashmapIterator($this->cache['Event_type_aclEvent_type']);
+      return XPClass::forName('de.uska.db.Event_type_acl')
+        ->getMethod('getPeer')
+        ->invoke(NULL)
+        ->iteratorFor(new Criteria(
+          array('event_type_id', $this->getEvent_type_id(), EQUAL)
       ));
     }
   }
