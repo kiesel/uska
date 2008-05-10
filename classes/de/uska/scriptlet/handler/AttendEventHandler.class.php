@@ -51,6 +51,8 @@
       if ($request->hasParam('guest')) $this->setValue('mode', 'addguest');
 
       $player_id= $context->user->getPlayer_id();
+      
+      // Check for "su" attending mode (admin)
       if (
         $request->hasParam('player_id') && 
         $request->getParam('player_id') != $player_id &&
@@ -71,6 +73,7 @@
         $this->setFormValue('attend', $attendee->getAttend());
         $this->setFormValue('offers_seats', $attendee->getOffers_seats());
         $this->setFormValue('needs_seat', $attendee->getNeeds_driver());
+        $this->setFormValue('fetch_key', $attendee->getFetch_key());
         
         if ($this->getvalue('mode') != 'addguest') {
           $this->setFormvalue('firstname', $player->getFirstname());
@@ -97,12 +100,11 @@
     /**
      * Handle submitted data. Either create an event or update an existing one.
      *
-     * @param   &scriptlet.xml.XMLScriptletRequest request
-     * @param   &scriptlet.xml.workflow.Context context
+     * @param   scriptlet.xml.XMLScriptletRequest request
+     * @param   scriptlet.xml.workflow.Context context
      * @return  boolean
      */
     public function handleSubmittedData($request, $context) {
-      $cm= ConnectionManager::getInstance();
       
       // Either user requires a driver or he can offer seats - not both.
       if ($this->wrapper->getNeeds_seat() && $this->wrapper->getOffers_seats() > 0) {
@@ -122,7 +124,7 @@
       
       $attendee= $this->wrapper->getPlayer_id();
       try {
-        $db= $cm->getByHost('uskadb', 0);
+        $db= ConnectionManager::getInstance()->getByHost('uskadb', 0);
         $transaction= $db->begin(new Transaction('attend'));
         
         // Check if this is a guest attendee
@@ -161,6 +163,7 @@
         $eventattend->setAttend($this->wrapper->getAttend());
         $eventattend->setOffers_seats($this->wrapper->getOffers_seats());
         $eventattend->setNeeds_driver((int)$this->wrapper->getNeeds_seat());
+        $eventattend->setFetch_key((int)$this->wrapper->getFetch_key());
         $eventattend->setChangedby($context->user->getUsername());
         $eventattend->setLastchange(Date::now());
         $eventattend->save();
@@ -180,10 +183,13 @@
         ));
       } catch (SQLException $e) {
         $transaction->rollback();
-        throw($e);
+        throw $e;
       }
       
+      // Allow unattending, but do not allow attending when max_attendees 
+      // has been reached.
       if (
+        $eventattend->getAttend() !== 0 && 
         $count['attendees'] > $event->getMax_attendees() &&
         !$context->hasPermission('create_event')
       ) {
@@ -199,9 +205,9 @@
     /**
      * In case of success, redirect the user to the event's page.
      *
-     * @param   &scriptlet.xml.workflow.WorkflowScriptletRequest request 
-     * @param   &scriptlet.xml.XMLScriptletResponse response 
-     * @param   &scriptlet.xml.Context context
+     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request 
+     * @param   scriptlet.xml.XMLScriptletResponse response 
+     * @param   scriptlet.xml.Context context
      */
     public function finalize($request, $response, $context) {
       $response->forwardTo('event/view', $this->getValue('event_id'));

@@ -22,18 +22,19 @@
     /**
      * Process this state.
      *
-     * @param   &scriptlet.xml.workflow.WorkflowScriptletRequest request 
-     * @param   &scriptlet.xml.XMLScriptletResponse response 
-     * @param   &scriptlet.xml.Context context
+     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request 
+     * @param   scriptlet.xml.XMLScriptletResponse response 
+     * @param   scriptlet.xml.Context context
      * @return  boolean
      */
     public function process($request, $response, $context) {
       parent::process($request, $response, $context);
       
       $event= Event::getByEvent_id(intval($request->getQueryString()));
-      if (!$event) return FALSE;
+      if (!$event instanceof Event) return FALSE;
 
-      $event && $query= $this->db->query('
+      $db= ConnectionManager::getInstance()->getByHost('uska', 0);
+      $query= $db->query('
         select
           p.player_id,
           p.firstname,
@@ -42,7 +43,8 @@
           p.created_by,
           a.offers_seats,
           a.needs_driver,
-          a.attend
+          a.attend,
+          a.fetch_key
         from
           event as e,
           player as p left outer join event_attendee as a on p.player_id= a.player_id and a.event_id= e.event_id
@@ -59,7 +61,8 @@
           p.created_by,
           a.offers_seats,
           a.needs_driver,
-          a.attend
+          a.attend,
+          a.fetch_key
         from
           event_attendee as a,
           player as p

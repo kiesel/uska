@@ -16,35 +16,30 @@
     /**
      * Process this state.
      *
-     * @param   &scriptlet.xml.workflow.WorkflowScriptletRequest request
-     * @param   &scriptlet.xml.XMLScriptletResponse response
+     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request
+     * @param   scriptlet.xml.XMLScriptletResponse response
      */
     public function process($request, $response) {
-      $cm= ConnectionManager::getInstance();
       
       // Fetch entry
-      try {
-        $db= $cm->getByHost('uskanews', 0);
-        $q= $db->query('
-          select 
-            entry.id as id,
-            entry.title as title,
-            entry.body as body,
-            entry.extended as extended,
-            entry.author as author,
-            entry.timestamp as timestamp
-          from
-            serendipity_entries entry
-          where
-            entry.id= %d
-            and isdraft = "false"
-          ',
-          $request->getQueryString()
-        );
-      } catch (SQLException $e) {
-        throw($e);
-      }
-      
+      $db= ConnectionManager::getInstance()->getByHost('uskanews', 0);
+      $q= $db->query('
+        select 
+          entry.id as id,
+          entry.title as title,
+          entry.body as body,
+          entry.extended as extended,
+          entry.author as author,
+          entry.timestamp as timestamp
+        from
+          serendipity_entries entry
+        where
+          entry.id= %d
+          and isdraft = "false"
+        ',
+        $request->getQueryString()
+      );
+
       // Check if we found an entry
       if (!($record= $q->next())) {
         $response->addFormError('entry', 'notfound', '*', $request->getQueryString());

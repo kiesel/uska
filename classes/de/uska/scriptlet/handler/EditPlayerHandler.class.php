@@ -30,8 +30,8 @@
     /**
      * Get identifier.
      *
-     * @param   &scriptlet.xml.workflow.WorkflowScriptletRequest request
-     * @param   &scriptlet.xml.Context context
+     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request
+     * @param   scriptlet.xml.Context context
      * @return  string
      */
     public function identifierFor($request, $context) {
@@ -41,8 +41,8 @@
     /**
      * Setup handler
      *
-     * @param   &scriptlet.xml.XMLScriptletRequest request
-     * @param   &scriptlet.xml.workflow.Context context
+     * @param   scriptlet.xml.XMLScriptletRequest request
+     * @param   scriptlet.xml.workflow.Context context
      * @return  boolean
      */
     public function setup($request, $context) {
@@ -80,40 +80,33 @@
       $prop= $pm->getProperties('product');
       $cm= ConnectionManager::getInstance();
       
-      try {
-        $db= $cm->getByHost('uska', 0);
-        $teams= $db->select('
-            team_id,
-            name
-          from
-            team
-          where team_id in (%d)',
-          $prop->readArray($request->getProduct(), 'teams')
-        );
-      } catch (SQLException $e) {
-        throw($e);
-      }
+      $db= $cm->getByHost('uska', 0);
+      $teams= $db->select('
+          team_id,
+          name
+        from
+          team
+        where team_id in (%d)',
+        $prop->readArray($request->getProduct(), 'teams')
+      );
+
       $this->setValue('teams', $teams);
       
       // Select mailinglists
-      try {
-        $mls= $db->select('
-            m.mailinglist_id,
-            m.name,
-            m.address,
-            mpm.player_id as subscribed
-          from
-            mailinglist as m
-              left outer join mailinglist_player_matrix as mpm
-            on
-              m.mailinglist_id= mpm.mailinglist_id
-              and mpm.player_id= %d
-          ',
-          $request->getParam('player_id', NULL)
-        );
-      } catch (SQLException $e) {
-        throw($e);
-      }
+      $mls= $db->select('
+          m.mailinglist_id,
+          m.name,
+          m.address,
+          mpm.player_id as subscribed
+        from
+          mailinglist as m
+            left outer join mailinglist_player_matrix as mpm
+          on
+            m.mailinglist_id= mpm.mailinglist_id
+            and mpm.player_id= %d
+        ',
+        $request->getParam('player_id', NULL)
+      );
       
       foreach ($mls as $m) {
         $this->setFormValue(

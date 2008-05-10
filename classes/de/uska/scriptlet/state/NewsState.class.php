@@ -22,13 +22,13 @@
       return 1;
     }
 
-    /*
+    /**
      * Retrieve entries
      *
      * @access  protected
-     * @param   &rdbms.DBConnection db
-     * @param   &scriptlet.xml.workflow.WorkflowScriptletRequest request 
-     * @return  &rdbms.ResultSet
+     * @param   rdbms.DBConnection db
+     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request 
+     * @return  rdbms.ResultSet
      */
     public function getEntries($db, $request) {
       return $db->query('

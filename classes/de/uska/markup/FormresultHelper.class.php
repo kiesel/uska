@@ -26,7 +26,7 @@
      *
      * @param   string name
      * @param   string string
-     * @return  &xml.Node
+     * @return  xml.Node
      */
     public static function markupNodeFor($name, $string) {
       static $parser= NULL, $builder= NULL;

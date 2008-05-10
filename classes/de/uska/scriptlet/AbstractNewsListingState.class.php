@@ -17,22 +17,22 @@
    *
    * @purpose  Base news state
    */
-  class AbstractNewsListingState extends UskaState {
+  abstract class AbstractNewsListingState extends UskaState {
 
     /**
      * Retrieve entries
      *
-     * @param   &rdbms.DBConnection db
-     * @param   &scriptlet.xml.workflow.WorkflowScriptletRequest request 
-     * @return  &rdbms.ResultSet
+     * @param   rdbms.DBConnection db
+     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request 
+     * @return  rdbms.ResultSet
      */
-    public function getEntries($db, $request) { }
+    public abstract function getEntries($db, $request);
     
     /**
      * Return date
      *
-     * @param   &scriptlet.xml.workflow.WorkflowScriptletRequest request 
-     * @return  &util.Date
+     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request 
+     * @return  util.Date
      */
     public function getContextMonth($request) {
       return Date::now();
@@ -41,7 +41,7 @@
     /**
      * Retrieve parent category's ID
      *
-     * @param   &scriptlet.xml.workflow.WorkflowScriptletRequest request
+     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request
      * @return  int
      */
     public function getParentCategory($request) {
@@ -51,8 +51,8 @@
     /**
      * Process this state.
      *
-     * @param   &scriptlet.xml.workflow.WorkflowScriptletRequest request
-     * @param   &scriptlet.xml.XMLScriptletResponse response
+     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request
+     * @param   scriptlet.xml.XMLScriptletResponse response
      */
     public function process($request, $response) {
 
@@ -67,9 +67,8 @@
         )) + 6) % 7
       )));
 
-      $cm= ConnectionManager::getInstance();
       try {
-        $db= $cm->getByHost('uskanews', 0);
+        $db= ConnectionManager::getInstance()->getByHost('uskanews', 0);
         
         // Add all categories to the formresult
         $n= $response->addFormResult(new Node('categories'));

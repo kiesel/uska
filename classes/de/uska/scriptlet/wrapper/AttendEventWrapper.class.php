@@ -7,6 +7,7 @@
   uses(
     'scriptlet.xml.workflow.Wrapper',
     'scriptlet.xml.workflow.casters.ToBoolean',
+    'scriptlet.xml.workflow.casters.ToBoolean',
     'scriptlet.xml.workflow.checkers.IntegerRangeChecker',
     'scriptlet.xml.workflow.checkers.IntegerRangeChecker'    
   );
@@ -81,6 +82,14 @@
         NULL,
         array('scriptlet.xml.workflow.checkers.IntegerRangeChecker', 0, 10)
       );
+      $this->registerParamInfo(
+        'fetch_key',
+        OCCURRENCE_UNDEFINED,
+        NULL,
+        array('scriptlet.xml.workflow.casters.ToBoolean'),
+        NULL,
+        NULL
+      );
     }
 
     /**
@@ -144,6 +153,15 @@
      */
     public function getOffers_seats() {
       return $this->getValue('offers_seats');
+    }
+
+    /**
+     * Returns the value of the parameter fetch_key
+     *
+     * @return  boolean
+     */
+    public function getFetch_key() {
+      return $this->getValue('fetch_key');
     }
 
   }

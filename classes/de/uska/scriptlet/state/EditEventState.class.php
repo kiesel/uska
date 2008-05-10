@@ -10,7 +10,7 @@
   );
 
   /**
-   * (Insert class' description here)
+   * Edit single event
    *
    * @ext      extension
    * @see      reference
@@ -30,9 +30,9 @@
     /**
      * Setup the state
      *
-     * @param   &scriptlet.xml.workflow.WorkflowScriptletRequest request 
-     * @param   &scriptlet.xml.XMLScriptletResponse response 
-     * @param   &scriptlet.xml.Context context
+     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request 
+     * @param   scriptlet.xml.XMLScriptletResponse response 
+     * @param   scriptlet.xml.Context context
      */
     public function setup($request, $response, $context) {
       $this->addHandler(new EditEventHandler());

@@ -15,9 +15,8 @@
    * @purpose  Base state
    */
   class UskaState extends AbstractState {
-    public
-      $cat=     NULL,
-      $db=      NULL;
+    const
+      LOGINCOOKIE   = 'uska-loginname';
       
     /**
      * Constructor.
@@ -31,16 +30,16 @@
      * Setup this state. Sets up database connection and redirects
      * to login form in case the state needs an authenticated user.
      *
-     * @param   &scriptlet.xml.workflow.WorkflowScriptletRequest request 
-     * @param   &scriptlet.xml.XMLScriptletResponse response 
-     * @param   &scriptlet.xml.Context context
+     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request 
+     * @param   scriptlet.xml.XMLScriptletResponse response 
+     * @param   scriptlet.xml.Context context
      */
     public function setup($request, $response, $context) {
       $autologin= FALSE;
     
       // Login user, if auto-login is enabled through cookie
-      if ($request->hasCookie('uska.loginname')) {
-        list ($username, $hash)= explode('|', $request->getCookie('uska.loginname')->getValue());
+      if ($request->hasCookie(self::LOGINCOOKIE)) {
+        list ($username, $hash)= explode('|', $request->getCookie(self::LOGINCOOKIE)->getValue());
         if ($hash == md5($username.PropertyManager::getInstance()->getProperties('product')->readString('login', 'secret'))) {
           $autologin= TRUE;
         }
@@ -48,56 +47,46 @@
     
       // Automatically handle authentication if state indicates so
       if ($this->requiresAuthentication() || $autologin) {
-        if (!is('de.uska.db.Player', $context->user)) {
+        if (!$context->user instanceof Player) {
 
           // Store return point in session
-          $uri= $request->getURI();
-          $request->session->putValue('authreturn', $uri);
+          $request->session->putValue('authreturn', $request->getURI());
 
           // Send redirect
           $response->sendRedirect(sprintf(
-            '%s://%s/xml/%s.%s%s/%s%s%s',
-            $uri['scheme'],
-            $uri['host'],
-            $request->getProduct(),
-            $request->getLanguage(),
-            '.psessionid='.$request->getSessionId(),
-            'login',                                            // Authenticate state
-            empty($uri['query']) ? '' : '?'.$uri['query'],
-            empty($uri['fraction']) ? '' : '#'.$uri['fraction']        
+            '%s://%s/xml/%s',
+            $request->getURL()->getScheme(),
+            $request->getURL()->getHost(),
+            'login'                                            // Authenticate state
           ));
           
           return FALSE;
         }
       }
+      
+      $response->addFormResult(Node::fromArray(
+        PropertyManager::getInstance()->getProperties('product')->readSection('web'),
+        'config'
+      ));
     
-      $cm= ConnectionManager::getInstance();
-      $this->db= $cm->getByHost($request->getProduct(), 0);
       parent::setup($request, $response, $context);
     }
   
     /**
      * Insert all teams into the result tree.
      *
-     * @param   &scriptlet.xml.workflow.WorkflowScriptletRequest request 
-     * @param   &scriptlet.xml.XMLScriptletResponse response 
+     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request 
+     * @param   scriptlet.xml.XMLScriptletResponse response 
      */
     public function insertTeams($request, $response) {
-      $pm= PropertyManager::getInstance();
-      $prop= $pm->getProperties('product');
-      
-      try {
-        $teams= $this->db->select('
-            team_id,
-            name
-          from
-            team
-          where team_id in (%d)',
-          $prop->readArray($request->getProduct(), 'teams')
-        );
-      } catch (SQLException $e) {
-        throw($e);
-      }
+      $teams= ConnectionManager::getInstance()->getByHost('uska', 0)->select('
+          team_id,
+          name
+        from
+          team
+        where team_id in (%d)',
+        PropertyManager::getInstance()->getProperties('product')->readArray($request->getProduct(), 'teams')
+      );
       
       $response->addFormResult(Node::fromArray($teams, 'teams'));
     }
@@ -105,13 +94,10 @@
     /**
      * Insert event calendar into result tree.
      *
-     * @param   &scriptlet.xml.workflow.WorkflowScriptletRequest request 
-     * @param   &scriptlet.xml.XMLScriptletResponse response 
+     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request 
+     * @param   scriptlet.xml.XMLScriptletResponse response 
      */
     public function insertEventCalendar($request, $response, $team= NULL, $contextDate= NULL) {
-      $pm= PropertyManager::getInstance();
-      $prop= $pm->getProperties('product');
-      
       if (!$contextDate) $contextDate= Date::now();
       
       $month= $response->addFormResult(new Node('month', NULL, array(
@@ -122,25 +108,22 @@
           0, 0, 0, $contextDate->getMonth(), 1, $contextDate->getYear()
         )) + 6) % 7
       )));
-
-      try {
-        $calendar= $this->db->query('
-          select
-            dayofmonth(target_date) as day,
-            count(*) as numevents
-          from
-            event as e
-          where year(target_date) = %d
-            and month(target_date) = %d
-            %c
-          group by day',
-          $contextDate->getYear(),
-          $contextDate->getMonth(),
-          ($team ? $this->db->prepare('and team_id= %d', $team) : '')
-        );
-      } catch (SQLException $e) {
-        throw($e);
-      }
+  
+      $db= ConnectionManager::getInstance()->getByHost('uska', 0);
+      $calendar= $db->query('
+        select
+          dayofmonth(target_date) as day,
+          count(*) as numevents
+        from
+          event as e
+        where year(target_date) = %d
+          and month(target_date) = %d
+          %c
+        group by day',
+        $contextDate->getYear(),
+        $contextDate->getMonth(),
+        ($team ? $db->prepare('and team_id= %d', $team) : '')
+      );
       
       while ($record= $calendar->next()) {
         $month->addChild(new Node('entries', $record['numevents'], array(

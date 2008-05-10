@@ -23,7 +23,7 @@
     /**
      * Set up the context.
      *
-     * @param   &scriptlet.xml.XMLScriptletRequest request
+     * @param   scriptlet.xml.XMLScriptletRequest request
      */
     public function setup($request) {
       $cm= ConnectionManager::getInstance();
@@ -45,41 +45,16 @@
     /**
      * Process the context.
      *
-     * @param   &scriptlet.HttpScriptletRequest request
+     * @param   scriptlet.HttpScriptletRequest request
      * @throws  lang.IllegalAccessException to indicate an error
      */
     public function process($request) {
-      if ($this->user) {
-        $cookie= $request->getCookie('uska-user');
-        if (!is('scriptlet.Cookie', $cookie) || !$this->user->getUsername() == $cookie->getValue()) {
-          $log= Logger::getInstance();
-          $cat= $log->getCategory();
-          
-          $cat->warn('User', $this->user->getUsername(), 'has exposed his session id to user', $cookie);
-          $cat->warn('Destroying session', $request->getSessionId());
-          
-          // Build URL we have to forward to...
-          $uri= $request->getUri();
-          $pathinfo= sscanf($uri['path'], '/xml/%[^.].%[^./].psessionid=%[^/]/%s');
-          
-          $this->_forwardTo= sprintf('%s://%s/xml/%s.%s/%s%s',
-            $uri['scheme'],
-            $uri['host'],
-            $request->getProduct(),
-            $request->getLanguage(),
-            $pathinfo[3],
-            strlen($request->getQueryString()) ? '?'.$request->getQueryString() : ''
-          );
-          
-          $cat->debug($uri, $pathinfo, $this->_forwardTo);
-        }
-      }
     }
 
     /**
      * Insert status information to result tree
      *
-     * @param   &scriptlet.xml.XMLScriptletResponse response
+     * @param   scriptlet.xml.XMLScriptletResponse response
      */
     public function insertStatus($response) {
       if (isset($this->_forwardTo)) {
@@ -106,7 +81,7 @@
     /**
      * Set user.
      *
-     * @param   &de.uska.db.Player user
+     * @param   de.uska.db.Player user
      */
     public function setUser($user) {
       $this->user= $user;
@@ -116,7 +91,7 @@
     /**
      * Set permissions
      *
-     * @param   &array perms
+     * @param   array perms
      */
     public function setPermissions($perm) {
       $this->permissions= $perm;
@@ -131,6 +106,62 @@
      */
     public function hasPermission($name) {
       return isset($this->permissions[$name]);
+    }
+    
+    /**
+     * Authenticate user by password
+     *
+     * @param   de.uska.db.Player player
+     * @param   string password
+     * @return  bool
+     */
+    public function authenticateUserByPassword($player, $password) {
+      if (!$player instanceof Player) return FALSE;
+      if ($player->getPassword() != md5($password)) return FALSE;
+    
+      return $this->authenticateUser($player);
+    }    
+    
+    /**
+     * Authenticate user by cookie
+     *
+     * @param   scriptlet.Cookie cookie
+     * @return  bool
+     */
+    public function authenticateUserByCookie(Cookie $cookie) {
+      list ($username, $hash)= explode('|', $cookie->getValue());
+      if ($hash !== md5($username.PropertyManager::getInstance()->getProperties('product')->readString('login', 'secret')))
+        return FALSE;
+
+      return $this->authenticateUser(Player::getByUsername($username));
+    }
+    
+    /**
+     * Perform user login
+     *
+     * @param   de.uska.db.Player player
+     * @return  bool
+     */
+    protected function authenticateUser(Player $player) {
+      if (!$player instanceof Player) return FALSE;
+      if ($player->getBz_id() != 20000) return FALSE;
+    
+      $this->setUser($player);
+      $perms= ConnectionManager::getInstance()->getByHost('uska', 0)->select('
+          p.name
+        from
+          plain_right_matrix as prm,
+          permission as p
+        where p.permission_id= prm.permission_id
+          and prm.player_id= %d',
+        $player->getPlayer_id()
+      );
+      
+      $cperms= array();
+      foreach ($perms as $p) { $cperms[$p['name']]= TRUE; }
+      $this->setPermissions($cperms);
+      
+      return TRUE;
     }
   }
 ?>

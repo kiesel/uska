@@ -10,20 +10,18 @@
   );
 
   /**
-   * (Insert class' description here)
+   * Events state
    *
-   * @ext      extension
-   * @see      reference
-   * @purpose  purpose
+   * @purpose  Display list of events
    */
   class EventsState extends UskaState {
   
     /**
      * Process this state.
      *
-     * @param   &scriptlet.xml.workflow.WorkflowScriptletRequest request 
-     * @param   &scriptlet.xml.XMLScriptletResponse response 
-     * @param   &scriptlet.xml.Context context
+     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request 
+     * @param   scriptlet.xml.XMLScriptletResponse response 
+     * @param   scriptlet.xml.Context context
      */
     public function process($request, $response, $context) {
       // FIXME: Put into ini-file?
@@ -35,51 +33,51 @@
       );
       parent::process($request, $response, $context);
       
-      try {
-        $team= FALSE;
-        $type= FALSE;
-        $all=  FALSE;
-        $year= $month= $day= FALSE;
-        with ($env= $request->getQueryString()); {
-          if (strlen($env)) @list($type, $all, $team, $year, $month, $day)= explode(',', $env);
-        }
-        
-        $q= $this->db->query('
-          select
-            e.event_id,
-            e.team_id,
-            t.name as teamname,
-            e.name,
-            e.description,
-            e.target_date,
-            e.deadline,
-            e.max_attendees,
-            e.req_attendees,
-            e.allow_guests,
-            e.event_type_id,
-            e.lastchange,
-            e.changedby
-          from
-            event as e,
-            team as t
-          where t.team_id= e.team_id
-            %c
-            %c
-            %c
-            %c
-            %c
-            %c
-          order by e.target_date asc',
-          ($team ? $this->db->prepare('and e.team_id= %d', $team) : ''),
-          ($type && isset($types[$type]) ? $this->db->prepare('and e.event_type_id= %d', $types[$type]) : ''),
-          ($all  ? '' : $this->db->prepare('and e.target_date > now()')),
-          ($year ? $this->db->prepare('and year(e.target_date)= %d', $year) : ''),
-          ($month ? $this->db->prepare('and month(e.target_date)= %d', $month) : ''),
-          ($day  ? $this->db->prepare('and day(e.target_date)= %d', $day) : '')
-        );
-      } catch (SQLException $e) {
-        throw($e);
+      $team= FALSE;
+      $type= FALSE;
+      $all=  FALSE;
+      $day=  NULL;
+      
+      list($year, $month)= explode('-', Date::now()->toString('Y-m-d'));
+      with ($env= $request->getQueryString()); {
+        if (strlen($env)) @list($type, $all, $team, $year, $month, $day)= explode(',', $env);
       }
+
+      $db= ConnectionManager::getInstance()->getByHost('uska', 0);
+      $q= $db->query('
+        select
+          e.event_id,
+          e.team_id,
+          t.name as teamname,
+          e.name,
+          e.description,
+          e.target_date,
+          e.deadline,
+          e.max_attendees,
+          e.req_attendees,
+          e.allow_guests,
+          e.event_type_id,
+          e.lastchange,
+          e.changedby
+        from
+          event as e,
+          team as t
+        where t.team_id= e.team_id
+          %c
+          %c
+          %c
+          %c
+          %c
+          %c
+        order by e.target_date asc
+        ',
+        ($team ? $db->prepare('and e.team_id= %d', $team) : ''),
+        ($type && isset($types[$type]) ? $db->prepare('and e.event_type_id= %d', $types[$type]) : ''),
+        ($all  ? '' : $db->prepare('and e.target_date > now()')),
+        ($year ? $db->prepare('and year(e.target_date)= %d', $year) : ''),
+        ($month ? $db->prepare('and month(e.target_date)= %d', $month) : ''),
+        ($day  ? $db->prepare('and day(e.target_date)= %d', $day) : '')
+      );
       
       $events= $response->addFormResult(new Node('events', NULL, array(
         'team'  => intval($team),
@@ -89,7 +87,7 @@
         'month' => intval($month),
         'day'   => intval($day)
       )));
-      while ($q && $record= $q->next()) {
+      while ($record= $q->next()) {
         $description= $record['description'];
         unset($record['description']);
         
