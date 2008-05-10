@@ -2,16 +2,18 @@
 #
 # $Id$ 
 
-WRAPPER_PHP=../../../classes/de/uska/scriptlet/wrapper
-PROJECT_DEPENDENCIES=xp-rt-5.6.2.xar
+XPCLI_CMD?=xpcli
+
+XP_VERSION=5.6.6
+SCRIPTLET_PACKAGE=de.uska.scriptlet
 
 include ../../Mk/common.mk
 include ../../Mk/dist.mk
+include ../../Mk/wrapper/generate.mk
 
 
 dbclasses:
-	for i in `ls -1 doc/dbxml/*.xml`; do \
-		FILE=`basename $$i`; \
-        CLASS=`echo $$FILE | sed -E 's/(.+)\.[a-z]+$$/\1/g'`; \
-		sabcmd ../../databases/util/classgen/data/xp.php.xsl $$i > ../../../classes/de/uska/db/$$CLASS.class.php ; \
-	done
+	@xpcli net.xp_framework.db.generator.DataSetCreator -c conf/db/uska/config.ini
+	@for i in `find conf/db/uska/tables/ -name '*.xml' -type f`; do \
+      xpcli net.xp_framework.db.generator.DataSetCreator -c conf/db/uska/config.ini -X $$i -O classes ; \
+    done

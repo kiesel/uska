@@ -6,3 +6,13 @@ DirectoryIndex index.php index.html
 SetEnv DEF_PROD uska
 SetEnv DEF_LANG de_DE
 SetEnv DEF_STATE news
+
+CheckSpelling off
+AddType x-mapp-php5 .php
+
+ExpiresActive on
+ExpiresByType image/gif A604800
+ExpiresByType image/png A604800
+ExpiresByType image/jpg A604800
+ExpiresByType image/jpeg A604800
+ExpiresByType text/css A604800
