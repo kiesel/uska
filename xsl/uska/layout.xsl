@@ -13,6 +13,7 @@
  extension-element-prefixes="func"
  exclude-result-prefixes="func php exsl"
 >
+  <xsl:import href="../overrideables.inc.xsl"/>
   <xsl:include href="../master.xsl"/>
   
   <xsl:variable name="navigation">
@@ -69,6 +70,16 @@
         <title><xsl:value-of select="func:get_text(concat('pagecaption#', $__state, '-', $__page))"/> - United Schlund Karlsruhe eV.</title>
         <link rel="stylesheet" href="/styles/main.css"/>
         <link rel="stylesheet" href="/styles/common.css"/>
+        <xsl:call-template name="html-head"/>
+        
+        <xsl:if test="/formresult/config/google-analytics-code != ''">
+          <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">&#160;
+          </script>
+          <script type="text/javascript">
+          _uacct = "<xsl:value-of select="formresult/config/google-analytics-code"/>";
+          urchinTracker();
+          </script>
+        </xsl:if>
       </head>
       <body>
         <center>

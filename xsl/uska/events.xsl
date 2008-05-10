@@ -17,14 +17,18 @@
   <xsl:include href="../wizard.inc.xsl"/>
   <xsl:include href="calendar.inc.xsl"/>
   
+  <xsl:template name="html-head">
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed for USKA eV." href="/rss/"/>
+  </xsl:template>
+  
   <xsl:template name="context">
     <xsl:call-template name="default_subnavigation">
       <xsl:with-param name="items">
         <xsl:if test="'' != func:hasPermission('create_event')">
           <item href="{func:link('event/edit')}">Neuer Termin</item>
         </xsl:if>
-        <item href="{func:link('events?training,0,2')}">Trainings Mädels</item>
-        <item href="{func:link('events?training,0,1')}">Trainings Jungs</item>
+        <!-- <item href="{func:link('events?training,0,2')}">Trainings Mädels</item> -->
+        <!-- <item href="{func:link('events?training,0,1')}">Trainings Jungs</item> -->
         <item href="{func:link('events?tournament')}">Turniere</item>
         <item href="{func:link('events?misc')}">Sonstiges</item>
       </xsl:with-param>

@@ -19,7 +19,7 @@
   </xsl:template>
   
   <xsl:template name="content">
-    <form method="post" action="{func:link($__state)}">
+    <form method="post">
     <input type="hidden" name="__handler" value="{/formresult/handlers/handler[@name= 'attendeventhandler']/@id}"/>
     <input type="hidden" name="event_id" value="{/formresult/formvalues/param[@name= 'event_id']}"/>
     
@@ -53,6 +53,9 @@
           <!-- Driving information -->
           <xsl:copy-of select="func:wizard_row_checkbox('attendeventhandler', 'needs_seat')"/>
           <xsl:copy-of select="func:wizard_row_input('attendeventhandler', 'offers_seats', 10)"/>
+          
+          <!-- Fetching information -->
+          <xsl:copy-of select="func:wizard_row_checkbox('attendeventhandler', 'fetch_key')"/>
         </table>
       </fieldset>
        

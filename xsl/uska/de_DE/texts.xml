@@ -70,6 +70,7 @@
   <text for="attendee#neededseats">Mitfahrer</text>
   <text for="attendee#availableseats">Mitfahrgelegenheit(en)</text>
   <text for="attendee#guestof">Gast von</text>
+  <text for="attendee#fetch_key">holt Schlüssel</text>
   
   <text for="attendeventhandler#attend">Nehme teil</text>
   <text for="attendeventhandler-attend#yes">Ja, na klar</text>
@@ -77,6 +78,7 @@
   <text for="attendeventhandler-attend#unknown">Weiß noch nicht</text>
   <text for="attendeventhandler#needs_seat">Brauche Mitfahrgelegenheit</text>
   <text for="attendeventhandler#offers_seats">Habe soviele Plätze frei</text>
+  <text for="attendeventhandler#fetch_key">Hole vorher Schlüssel ab</text>
   <text for="attendeventhandler#form-success">Deine Teilnahmedaten wurden gespeichert.</text>
   <text for="attendeventhandler#firstname">Vorname</text>
   <text for="attendeventhandler#lastname">Nachname</text>

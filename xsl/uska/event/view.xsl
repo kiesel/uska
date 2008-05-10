@@ -88,10 +88,11 @@
           <td>
             <xsl:if test="@attend = 1">
               <xsl:choose>
-                <xsl:when test="@offers_seats &gt; 0"><xsl:value-of select="concat(@offers_seats, ' ', func:get_text('attendee#offers_seats'))"/></xsl:when>
-                <xsl:when test="@needs_driver = 1"><xsl:value-of select="func:get_text('attendee#needs_driver')"/></xsl:when>
+                <xsl:when test="@offers_seats &gt; 0"><xsl:value-of select="concat(@offers_seats, ' ', func:get_text('attendee#offers_seats'))"/><br/></xsl:when>
+                <xsl:when test="@needs_driver = 1"><xsl:value-of select="func:get_text('attendee#needs_driver')"/><br/></xsl:when>
                 <xsl:otherwise>&#160;</xsl:otherwise>
               </xsl:choose>
+              <xsl:if test="@fetch_key= '1'"><xsl:value-of select="func:get_text('attendee#fetch_key')"/></xsl:if>
             </xsl:if>
           </td>
         </tr>
@@ -111,7 +112,16 @@
     <br/><br/>
     <p><small>Noch keine Teilnahme-Informationen gibt es von den folgenden Spielern:
     <i><xsl:for-each select="attendeeinfo/player[@attend= '']">
-      <xsl:value-of select="concat(@firstname, ' ', @lastname)"/>
+      <xsl:choose>
+        <xsl:when test="'' != func:hasPermission('create_event')">
+          <a href="{func:link(concat('event/attend?event_id=', /formresult/event/event_id, '&amp;player_id=', @player_id))}">
+            <xsl:value-of select="concat(@firstname, ' ', @lastname)"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat(@firstname, ' ', @lastname)"/>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:if test="position() != last()">, </xsl:if>
     </xsl:for-each>.
     </i></small></p>

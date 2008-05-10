@@ -11,7 +11,7 @@
  xmlns:func="http://exslt.org/functions"
  extension-element-prefixes="func"
 >
-  <xsl:output method="html" encoding="iso-8859-1" indent="yes"/>
+  <xsl:output method="html" encoding="utf-8" indent="yes"/>
   <xsl:include href="snippets.inc.xsl"/>
   <xsl:include href="date.inc.xsl"/>
   
@@ -33,19 +33,11 @@
   <func:function name="func:link">
     <xsl:param name="target"/>
     <xsl:variable name="sess">
-      <xsl:if test="$__sess != ''">.psessionid=<xsl:value-of select="$__sess"/></xsl:if>
+      <!-- <xsl:if test="$__sess != ''">psessionid=<xsl:value-of select="$__sess"/>/</xsl:if> -->
     </xsl:variable>
 
     <func:result>
-      <xsl:value-of select="concat(
-        '/xml/', 
-        $__product, 
-        '.', 
-        $__lang,
-        $sess,
-        '/',
-        $target
-      )"/>
+      <xsl:value-of select="concat('/xml/', $sess, $target)"/>
     </func:result>
   </func:function>
   
