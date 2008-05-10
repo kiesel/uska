@@ -33,4 +33,8 @@
       <cparam xsi:type="xsd:int">10</cparam>
     </postcheck>
   </param>
+  
+  <param name="fetch_key" type="boolean">
+    <caster class="scriptlet.xml.workflow.casters.ToBoolean"/>
+  </param>
 </interface>
