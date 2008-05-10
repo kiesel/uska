@@ -1,4 +1,4 @@
-<document created_at="Sat, 23 Jun 2007 16:52:12 +0200" created_by="Alex">
+<document created_at="Tue, 06 May 2008 19:05:14 +0200" created_by="Alex">
   <table
    name="event"
    dbhost="uska"
@@ -13,6 +13,7 @@
      identity="true"
      typename="int"
      nullable="false"
+     length="11"
     />
     <attribute
      name="team_id"
@@ -20,6 +21,7 @@
      identity="false"
      typename="int"
      nullable="false"
+     length="11"
     />
     <attribute
      name="name"
@@ -27,6 +29,7 @@
      identity="false"
      typename="string"
      nullable="false"
+     length="255"
     />
     <attribute
      name="description"
@@ -55,6 +58,7 @@
      identity="false"
      typename="int"
      nullable="true"
+     length="11"
     />
     <attribute
      name="req_attendees"
@@ -62,6 +66,7 @@
      identity="false"
      typename="int"
      nullable="true"
+     length="11"
     />
     <attribute
      name="allow_guests"
@@ -69,6 +74,7 @@
      identity="false"
      typename="int"
      nullable="true"
+     length="11"
     />
     <attribute
      name="event_type_id"
@@ -76,6 +82,7 @@
      identity="false"
      typename="int"
      nullable="false"
+     length="11"
     />
     <attribute
      name="changedby"
@@ -83,6 +90,7 @@
      identity="false"
      typename="string"
      nullable="false"
+     length="50"
     />
     <attribute
      name="lastchange"

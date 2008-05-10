@@ -1,4 +1,4 @@
-<document created_at="Sat, 23 Jun 2007 16:52:12 +0200" created_by="Alex">
+<document created_at="Tue, 06 May 2008 19:05:14 +0200" created_by="Alex">
   <table
    name="event_attendee"
    dbhost="uska"
@@ -13,6 +13,7 @@
      identity="false"
      typename="int"
      nullable="false"
+     length="11"
     />
     <attribute
      name="player_id"
@@ -20,6 +21,7 @@
      identity="false"
      typename="int"
      nullable="false"
+     length="11"
     />
     <attribute
      name="offers_seats"
@@ -27,6 +29,7 @@
      identity="false"
      typename="int"
      nullable="false"
+     length="11"
     />
     <attribute
      name="needs_driver"
@@ -34,6 +37,7 @@
      identity="false"
      typename="int"
      nullable="false"
+     length="11"
     />
     <attribute
      name="lastchange"
@@ -48,6 +52,7 @@
      identity="false"
      typename="string"
      nullable="false"
+     length="50"
     />
     <attribute
      name="attend"
@@ -55,6 +60,15 @@
      identity="false"
      typename="int"
      nullable="false"
+     length="11"
+    />
+    <attribute
+     name="fetch_key"
+     type="DB_ATTRTYPE_INT"
+     identity="false"
+     typename="int"
+     nullable="false"
+     length="11"
     />
     <index
      name="event_id_2"

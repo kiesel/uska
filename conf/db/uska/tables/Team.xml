@@ -1,4 +1,4 @@
-<document created_at="Sat, 23 Jun 2007 16:52:13 +0200" created_by="Alex">
+<document created_at="Tue, 06 May 2008 19:05:15 +0200" created_by="Alex">
   <table
    name="team"
    dbhost="uska"
@@ -13,6 +13,7 @@
      identity="true"
      typename="int"
      nullable="false"
+     length="11"
     />
     <attribute
      name="name"
@@ -20,6 +21,7 @@
      identity="false"
      typename="string"
      nullable="false"
+     length="255"
     />
     <index
      name="PRIMARY"
