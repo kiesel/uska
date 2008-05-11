@@ -5,7 +5,6 @@
  */
 
   uses(
-    'net.xp_framework.util.markup.MarkupBuilder',
     'scriptlet.HttpScriptlet',
   	'xml.rdf.RDFNewsFeed'
   );
@@ -88,7 +87,6 @@
       $seen= array();
       
       // Add items to feed, build markup
-      $markupBuilder= new MarkupBuilder();
       while ($q && $r= $q->next()) {
         if (isset($seen[$r['event_id']])) continue;
 
@@ -99,7 +97,7 @@
       	    $url->getHost(),
       	    $r['event_id']
       	  ),
-      	  $markupBuilder->markupFor($r['description']),
+      	  $r['description'],
       	  $r['target_date']
       	);
       	$seen[$r['id']]= TRUE;

@@ -1,6 +1,6 @@
 <?php
   require('lang.base.php');
-  xp::sapi('cgi', 'scriptlet.development');
+  xp::sapi('cgi', 'scriptlet.production');
   uses(
     'de.uska.scriptlet.RssFeedScriptlet',
     'util.PropertyManager',
