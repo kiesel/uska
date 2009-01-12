@@ -6,6 +6,15 @@ Version ?.?.?, released ????-??-??
 ----------------------------------
 SVN version: ?????
 
+Version 2.1.1, released 2009-01-12
+----------------------------------
+SVN version: 10537
+
+Bugfixes
+~~~~~~~~
+- Fixed a query which does not work on MySQL > 5
+  (kiesel)
+
 Version 2.1.0, released 2008-05-10
 ----------------------------------
 SVN version: 10202
