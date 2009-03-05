@@ -4,14 +4,14 @@
  * $Id$ 
  */
 
-  uses('scriptlet.xml.workflow.AbstractState');
+  uses('de.uska.scriptlet.state.UskaState');
 
   /**
    * About state. Does nothing.
    *
    * @purpose  Display about information.
    */
-  class AboutState extends AbstractState {
+  class AboutState extends UskaState {
   
   }
 ?>
