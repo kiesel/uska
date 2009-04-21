@@ -68,6 +68,11 @@
       if ($event) {
         $eventarr= (array)$event;
         unset($eventarr['description']);
+        
+        // Protection against private / protected members
+        foreach ($eventarr as $key => $value) {
+          if (FALSE !== strpos($key, "\0")) unset($eventarr[$key]);
+        }
 
         $node= $response->addFormResult(Node::fromArray($eventarr, 'event'));
         $node->addChild(FormresultHelper::markupNodeFor('description', $event->getDescription()));

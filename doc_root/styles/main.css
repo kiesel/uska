@@ -260,6 +260,9 @@ html>body #content_container {
 	font-size: 90%;
 }
 
+#content_container .tablenumber {
+    text-align: right;
+}
 
 /*--- container for the search form ----------------------------------------*/
 

@@ -54,16 +54,16 @@
           <td>
             <xsl:value-of select="concat(@firstname, ' ', @lastname)"/>
           </td>
-          <td><xsl:value-of select="@points"/></td>
-          <td><xsl:value-of select="@attendcount"/></td>
-          <td><xsl:value-of select="format-number(@points div @attendcount, '#.##')"/></td>
+          <td class="tablenumber"><xsl:value-of select="@points"/></td>
+          <td class="tablenumber"><xsl:value-of select="@attendcount"/></td>
+          <td class="tablenumber"><xsl:value-of select="format-number(@points div @attendcount, '#.##')"/></td>
         </tr>
       </xsl:for-each>
       <tr class="list_compute">
         <td>Gesamt: <xsl:value-of select="count(player)"/> Spieler</td>
-        <td></td>
-        <td><xsl:value-of select="format-number(sum(player/@attendcount) div count(player), '#.##')"/></td>
-        <td><xsl:value-of select="format-number(sum(player/@points) div sum(player/@attendcount), '#.##')"/></td> 
+        <td class="tablenumber">-</td>
+        <td class="tablenumber">-</td>
+        <td class="tablenumber">-</td> 
       </tr>
     </table>
   </xsl:template>
