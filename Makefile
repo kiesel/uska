@@ -4,7 +4,7 @@
 
 XPCLI_CMD?=xpcli
 
-XP_VERSION=5.6.7RC1
+XP_VERSION=5.7.2
 SCRIPTLET_PACKAGE=de.uska.scriptlet
 
 include ../../Mk/common.mk

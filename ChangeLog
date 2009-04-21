@@ -11,6 +11,12 @@ Version 2.1.2, released 2009-04-21
 ----------------------------------
 SVN version: ?????
 
+Features
+~~~~~~~~
+- Display news entries only half a year the most
+  on the frontpage
+  (kiesel)
+
 Bugfixes
 ~~~~~~~~
 - Made points table reappear

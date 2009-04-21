@@ -51,6 +51,7 @@
           and entry.isdraft = "false"
           and entry.id = matrix.entryid
           and matrix.categoryid = category.categoryid
+          and entry.timestamp > unix_timestamp(now())- (86400 * 180)  -- entry must be newer than half a year
         order by
           timestamp desc
         limit 20',
