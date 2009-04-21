@@ -6,6 +6,16 @@ Version ?.?.?, released ????-??-??
 ----------------------------------
 SVN version: ?????
 
+
+Version 2.1.2, released 2009-04-21
+----------------------------------
+SVN version: ?????
+
+Bugfixes
+~~~~~~~~
+- Made points table reappear
+  (kiesel)
+
 Version 2.1.1, released 2009-01-12
 ----------------------------------
 SVN version: 10537
