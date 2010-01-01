@@ -40,7 +40,6 @@
      */
     public function wantsContext($request) {
       return TRUE;
-      return $this->needsSession($request) || $request->hasSession();
     }
     
     /**
@@ -51,17 +50,6 @@
      */
     public function needsSession($request) {
       return TRUE;
-
-      // Check whether user has auto-login cookie - in that case, we need a
-      // context
-      if ($request->hasCookie(UskaState::LOGINCOOKIE)) {
-        Logger::getInstance()->getCategory()->debug('Want session due to cookie');
-        return TRUE;
-      }
-      
-      $result= parent::needsSession($request);
-      Logger::getInstance()->getCategory()->debug('Needs session=', $result);
-      return $result;
     }
     
     /**
@@ -88,6 +76,7 @@
         public function authenticate($request, $response, $context) {
           $cat= Logger::getInstance()->getCategory();
           $cat->debug("Authentication to be performed for", $request->getURI(), $context);
+
           if (!$request->state->requiresAuthentication()) {
             $cat->debug("No auth because state not requiring it.");
             return; // Skip
@@ -99,15 +88,11 @@
             $cat->debug("No auth because user is already authenticated");
             return; // OK
           }
-          if ("login" == $request->getStateName()) {
-            $cat->debug("No auth because state is loginstate");
-            return; // OK
-          }
 
-          Logger::getInstance()->getCategory()->debug("Authentication required!");
+          $cat->debug("Authentication required - initiating login...");
 
           // Dispatch - LoginHandler will redirect to original state
-          $request->session->putValue("authreturn", $request->getURL());
+          $request->session->putValue("authreturn", $request->getURI());
           $response->forwardTo("login");
         }
       }');
