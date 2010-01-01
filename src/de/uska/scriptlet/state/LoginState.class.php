@@ -59,9 +59,15 @@
       parent::setup($request, $response, $context);
       
       if ($request->hasParam('logout')) {
+        $this->cat->debug('Logging out');
+
+        // Store hint in session, to easily tell if user is logged in
+        $request->session->removeValue('logged-in');
+
+
         $context->setUser($n= NULL);
         $response->setCookie(new Cookie(UskaState::LOGINCOOKIE, '', time() - 1000, '/'));
-        $response->setCookie(new Cookie('session_id', '', time() - 1000, '/'));
+        $response->setCookie(new Cookie('psessionid', '', time() - 1000, '/'));
       
         $uri= $request->getURI();
         $response->sendRedirect(sprintf('%s://%s/xml/login',

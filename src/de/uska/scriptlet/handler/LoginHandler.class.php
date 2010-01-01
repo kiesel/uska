@@ -61,6 +61,9 @@
      */
     public function finalize($request, $response, $context) {
     
+      // Store hint in session, to easily tell if user is logged in
+      $request->session->putValue('logged-in', 1);
+
       // Remember user if he requests so
       if ($request->getParam('remember') == 'yes') {
         $secret= PropertyManager::getInstance()->getProperties('product')->readString('login', 'secret');

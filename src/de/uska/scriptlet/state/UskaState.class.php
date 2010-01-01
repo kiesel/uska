@@ -53,12 +53,7 @@
           $request->session->putValue('authreturn', $request->getURI());
 
           // Send redirect
-          $response->sendRedirect(sprintf(
-            '%s://%s/xml/%s',
-            $request->getURL()->getScheme(),
-            $request->getURL()->getHost(),
-            'login'                                            // Authenticate state
-          ));
+          $response->forwardTo('login');
           
           return FALSE;
         }

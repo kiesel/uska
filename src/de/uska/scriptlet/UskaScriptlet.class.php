@@ -6,6 +6,7 @@
 
   uses(
     'scriptlet.xml.workflow.AbstractXMLScriptlet',
+    'scriptlet.RequestAuthenticator',
     'xml.DomXSLProcessor'
   );
 
@@ -38,6 +39,7 @@
      * @return  bool
      */
     public function wantsContext($request) {
+      return TRUE;
       return $this->needsSession($request) || $request->hasSession();
     }
     
@@ -48,6 +50,7 @@
      * @return  bool
      */
     public function needsSession($request) {
+      return TRUE;
 
       // Check whether user has auto-login cookie - in that case, we need a
       // context
@@ -71,13 +74,43 @@
     public function doCreateSession($request, $response) {
       Logger::getInstance()->getCategory()->debug('Storing session', $request->session->getId(), 'as cookie');
       $response->setCookie(new Cookie(
-        'session_id',
+        'psessionid',
         $request->session->getId(),
         0,
         '/'
       ));
       
       return $this->doRedirect($request, $response);
+    }
+
+    public function getAuthenticator($request) {
+      return newinstance('scriptlet.RequestAuthenticator', array(), '{
+        public function authenticate($request, $response, $context) {
+          $cat= Logger::getInstance()->getCategory();
+          $cat->debug("Authentication to be performed for", $request->getURI(), $context);
+          if (!$request->state->requiresAuthentication()) {
+            $cat->debug("No auth because state not requiring it.");
+            return; // Skip
+          }
+
+          // HACK: Actually, we should use $context->getUser(), but currently context
+          // is never passed in. So, apply workaround instead.
+          if (1 == $request->session->getValue("logged-in")) {
+            $cat->debug("No auth because user is already authenticated");
+            return; // OK
+          }
+          if ("login" == $request->getStateName()) {
+            $cat->debug("No auth because state is loginstate");
+            return; // OK
+          }
+
+          Logger::getInstance()->getCategory()->debug("Authentication required!");
+
+          // Dispatch - LoginHandler will redirect to original state
+          $request->session->putValue("authreturn", $request->getURL());
+          $response->forwardTo("login");
+        }
+      }');
     }
   }
 ?>
