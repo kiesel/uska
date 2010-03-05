@@ -25,7 +25,7 @@
 
     static function __static() { 
       with ($peer= self::getPeer()); {
-        $peer->setTable('uska.team');
+        $peer->setTable('db319260938.team');
         $peer->setConnection('uska');
         $peer->setIdentity('team_id');
         $peer->setPrimary(array('team_id'));

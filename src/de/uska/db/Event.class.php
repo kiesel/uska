@@ -38,7 +38,7 @@
 
     static function __static() { 
       with ($peer= self::getPeer()); {
-        $peer->setTable('uska.event');
+        $peer->setTable('db319260938.event');
         $peer->setConnection('uska');
         $peer->setIdentity('event_id');
         $peer->setPrimary(array('event_id'));
