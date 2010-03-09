@@ -41,7 +41,7 @@
      *
      * @param   scriptlet.xml.XMLScriptletRequest request
      * @param   scriptlet.xml.workflow.Context context
-     * @return  boolean
+     * @return  bool
      */
     public function setup($request, $context) {
       if (!$context->hasPermission('edit_points')) return FALSE;
@@ -93,7 +93,7 @@
      *
      * @param   scriptlet.xml.XMLScriptletRequest request
      * @param   scriptlet.xml.workflow.Context context
-     * @return  boolean
+     * @return  bool
      */
     public function handleSubmittedData($request, $context) {
       $cm= ConnectionManager::getInstance();

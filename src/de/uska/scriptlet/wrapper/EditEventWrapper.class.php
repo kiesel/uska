@@ -233,7 +233,7 @@
     /**
      * Returns the value of the parameter guests
      *
-     * @return  boolean
+     * @return  bool
      */
     public function getGuests() {
       return $this->getValue('guests');

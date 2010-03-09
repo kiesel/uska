@@ -140,7 +140,7 @@
     /**
      * Returns the value of the parameter needs_seat
      *
-     * @return  boolean
+     * @return  bool
      */
     public function getNeeds_seat() {
       return $this->getValue('needs_seat');
@@ -158,7 +158,7 @@
     /**
      * Returns the value of the parameter fetch_key
      *
-     * @return  boolean
+     * @return  bool
      */
     public function getFetch_key() {
       return $this->getValue('fetch_key');

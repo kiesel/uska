@@ -43,7 +43,7 @@
      *
      * @param   scriptlet.xml.XMLScriptletRequest request
      * @param   scriptlet.xml.workflow.Context context
-     * @return  boolean
+     * @return  bool
      */
     public function setup($request, $context) {
       if (
@@ -124,7 +124,7 @@
      *
      * @param   &scriptlet.xml.XMLScriptletRequest request
      * @param   &scriptlet.xml.workflow.Context context
-     * @return  boolean
+     * @return  bool
      */
     public function handleSubmittedData($request, $context) {
       $log= Logger::getInstance();

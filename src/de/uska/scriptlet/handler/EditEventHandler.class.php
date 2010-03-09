@@ -42,7 +42,7 @@
      *
      * @param   scriptlet.xml.XMLScriptletRequest request
      * @param   scriptlet.xml.workflow.Context context
-     * @return  boolean
+     * @return  bool
      */
     public function setup($request, $context) {
       
@@ -104,7 +104,7 @@
      *
      * @param   scriptlet.xml.XMLScriptletRequest request
      * @param   scriptlet.xml.workflow.Context context
-     * @return  boolean
+     * @return  bool
      */
     public function handleSubmittedData($request, $context) {
       $sane= TRUE;

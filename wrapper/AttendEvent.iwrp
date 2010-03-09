@@ -23,7 +23,7 @@
     </postcheck>
   </param>
   
-  <param name="needs_seat" type="boolean">
+  <param name="needs_seat" type="bool">
     <caster class="scriptlet.xml.workflow.casters.ToBoolean"/>
   </param>
   
@@ -34,7 +34,7 @@
     </postcheck>
   </param>
   
-  <param name="fetch_key" type="boolean">
+  <param name="fetch_key" type="bool">
     <caster class="scriptlet.xml.workflow.casters.ToBoolean"/>
   </param>
 </interface>

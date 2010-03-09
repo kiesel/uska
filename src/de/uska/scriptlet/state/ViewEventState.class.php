@@ -25,7 +25,7 @@
      * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request 
      * @param   scriptlet.xml.XMLScriptletResponse response 
      * @param   scriptlet.xml.Context context
-     * @return  boolean
+     * @return  bool
      */
     public function process($request, $response, $context) {
       parent::process($request, $response, $context);

@@ -63,7 +63,7 @@
   <param name="req" type="int" occurrence="optional"/>
   
   <!-- Guests allowed? -->
-  <param name="guests" type="boolean">
+  <param name="guests" type="bool">
     <caster class="scriptlet.xml.workflow.casters.ToBoolean"/>
   </param>
 </interface>
