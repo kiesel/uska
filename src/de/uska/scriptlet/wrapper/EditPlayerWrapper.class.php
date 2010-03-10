@@ -8,11 +8,6 @@
     'scriptlet.xml.workflow.Wrapper',
     'scriptlet.xml.workflow.casters.ToEmailAddress',
     'scriptlet.xml.workflow.casters.ToTrimmedString',
-    'scriptlet.xml.workflow.casters.ToTrimmedString',
-    'scriptlet.xml.workflow.casters.ToTrimmedString',
-    'scriptlet.xml.workflow.casters.ToTrimmedString',
-    'scriptlet.xml.workflow.checkers.LengthChecker',
-    'scriptlet.xml.workflow.checkers.LengthChecker',
     'scriptlet.xml.workflow.checkers.LengthChecker',
     'scriptlet.xml.workflow.checkers.RegexpChecker'    
   );
@@ -33,7 +28,7 @@
     public function __construct() {
       $this->registerParamInfo(
         'player_id',
-        OCCURRENCE_OPTIONAL | OCCURRENCE_PASSBEHIND,
+        Wrapper::OCCURRENCE_OPTIONAL | Wrapper::OCCURRENCE_PASSBEHIND,
         NULL,
         NULL,
         NULL,
@@ -41,7 +36,7 @@
       );
       $this->registerParamInfo(
         'firstname',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         array('scriptlet.xml.workflow.casters.ToTrimmedString'),
         NULL,
@@ -49,7 +44,7 @@
       );
       $this->registerParamInfo(
         'lastname',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         array('scriptlet.xml.workflow.casters.ToTrimmedString'),
         NULL,
@@ -57,7 +52,7 @@
       );
       $this->registerParamInfo(
         'username',
-        OCCURRENCE_OPTIONAL,
+        Wrapper::OCCURRENCE_OPTIONAL,
         NULL,
         array('scriptlet.xml.workflow.casters.ToTrimmedString'),
         NULL,
@@ -65,7 +60,7 @@
       );
       $this->registerParamInfo(
         'password',
-        OCCURRENCE_OPTIONAL,
+        Wrapper::OCCURRENCE_OPTIONAL,
         NULL,
         array('scriptlet.xml.workflow.casters.ToTrimmedString'),
         NULL,
@@ -73,7 +68,7 @@
       );
       $this->registerParamInfo(
         'email',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         array('scriptlet.xml.workflow.casters.ToEmailAddress'),
         NULL,
@@ -81,7 +76,7 @@
       );
       $this->registerParamInfo(
         'team_id',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         NULL,
         NULL,
@@ -89,7 +84,7 @@
       );
       $this->registerParamInfo(
         'position',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         NULL,
         NULL,
@@ -97,7 +92,7 @@
       );
       $this->registerParamInfo(
         'mailinglist',
-        OCCURRENCE_MULTIPLE | OCCURRENCE_OPTIONAL,
+        Wrapper::OCCURRENCE_MULTIPLE | Wrapper::OCCURRENCE_OPTIONAL,
         NULL,
         NULL,
         NULL,

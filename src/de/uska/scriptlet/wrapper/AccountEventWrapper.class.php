@@ -24,7 +24,7 @@
     public function __construct() {
       $this->registerParamInfo(
         'event_id',
-        OCCURRENCE_PASSBEHIND,
+        Wrapper::OCCURRENCE_PASSBEHIND,
         NULL,
         NULL,
         NULL,
@@ -32,7 +32,7 @@
       );
       $this->registerParamInfo(
         'points',
-        OCCURRENCE_MULTIPLE,
+        Wrapper::OCCURRENCE_MULTIPLE,
         NULL,
         NULL,
         NULL,

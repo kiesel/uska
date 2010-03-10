@@ -7,8 +7,6 @@
   uses(
     'scriptlet.xml.workflow.Wrapper',
     'scriptlet.xml.workflow.casters.ToTrimmedString',
-    'scriptlet.xml.workflow.casters.ToTrimmedString',
-    'scriptlet.xml.workflow.checkers.RegexpChecker',
     'scriptlet.xml.workflow.checkers.RegexpChecker'    
   );
 
@@ -28,7 +26,7 @@
     public function __construct() {
       $this->registerParamInfo(
         'username',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         array('scriptlet.xml.workflow.casters.ToTrimmedString'),
         NULL,
@@ -36,7 +34,7 @@
       );
       $this->registerParamInfo(
         'password',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         array('scriptlet.xml.workflow.casters.ToTrimmedString'),
         NULL,

@@ -8,14 +8,9 @@
     'scriptlet.xml.workflow.Wrapper',
     'scriptlet.xml.workflow.casters.ToBoolean',
     'scriptlet.xml.workflow.casters.ToDate',
-    'scriptlet.xml.workflow.casters.ToDate',
-    'scriptlet.xml.workflow.casters.ToInteger',
     'scriptlet.xml.workflow.casters.ToInteger',
     'scriptlet.xml.workflow.casters.ToTrimmedString',
-    'scriptlet.xml.workflow.casters.ToTrimmedString',
     'scriptlet.xml.workflow.checkers.LengthChecker',
-    'scriptlet.xml.workflow.checkers.LengthChecker',
-    'scriptlet.xml.workflow.checkers.RegexpChecker',
     'scriptlet.xml.workflow.checkers.RegexpChecker'    
   );
 
@@ -35,7 +30,7 @@
     public function __construct() {
       $this->registerParamInfo(
         'event_id',
-        OCCURRENCE_PASSBEHIND | OCCURRENCE_OPTIONAL,
+        Wrapper::OCCURRENCE_PASSBEHIND | Wrapper::OCCURRENCE_OPTIONAL,
         NULL,
         NULL,
         NULL,
@@ -43,7 +38,7 @@
       );
       $this->registerParamInfo(
         'team',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         array('scriptlet.xml.workflow.casters.ToInteger'),
         NULL,
@@ -51,7 +46,7 @@
       );
       $this->registerParamInfo(
         'event_type',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         array('scriptlet.xml.workflow.casters.ToInteger'),
         NULL,
@@ -59,7 +54,7 @@
       );
       $this->registerParamInfo(
         'name',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         array('scriptlet.xml.workflow.casters.ToTrimmedString'),
         NULL,
@@ -67,7 +62,7 @@
       );
       $this->registerParamInfo(
         'description',
-        OCCURRENCE_OPTIONAL,
+        Wrapper::OCCURRENCE_OPTIONAL,
         NULL,
         array('scriptlet.xml.workflow.casters.ToTrimmedString'),
         NULL,
@@ -75,7 +70,7 @@
       );
       $this->registerParamInfo(
         'target_date',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         array('scriptlet.xml.workflow.casters.ToDate'),
         NULL,
@@ -83,7 +78,7 @@
       );
       $this->registerParamInfo(
         'target_time',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         NULL,
         array('scriptlet.xml.workflow.checkers.RegexpChecker', '/^\d{1,2}[:\.\-]\d{1,2}$/'),
@@ -91,7 +86,7 @@
       );
       $this->registerParamInfo(
         'deadline_date',
-        OCCURRENCE_OPTIONAL,
+        Wrapper::OCCURRENCE_OPTIONAL,
         NULL,
         array('scriptlet.xml.workflow.casters.ToDate'),
         NULL,
@@ -99,7 +94,7 @@
       );
       $this->registerParamInfo(
         'deadline_time',
-        OCCURRENCE_OPTIONAL,
+        Wrapper::OCCURRENCE_OPTIONAL,
         NULL,
         NULL,
         array('scriptlet.xml.workflow.checkers.RegexpChecker', '/^\d{1,2}[:\.\-]\d{1,2}$/'),
@@ -107,7 +102,7 @@
       );
       $this->registerParamInfo(
         'max',
-        OCCURRENCE_OPTIONAL,
+        Wrapper::OCCURRENCE_OPTIONAL,
         NULL,
         NULL,
         NULL,
@@ -115,7 +110,7 @@
       );
       $this->registerParamInfo(
         'req',
-        OCCURRENCE_OPTIONAL,
+        Wrapper::OCCURRENCE_OPTIONAL,
         NULL,
         NULL,
         NULL,
@@ -123,7 +118,7 @@
       );
       $this->registerParamInfo(
         'guests',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         array('scriptlet.xml.workflow.casters.ToBoolean'),
         NULL,

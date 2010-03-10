@@ -7,8 +7,6 @@
   uses(
     'scriptlet.xml.workflow.Wrapper',
     'scriptlet.xml.workflow.casters.ToBoolean',
-    'scriptlet.xml.workflow.casters.ToBoolean',
-    'scriptlet.xml.workflow.checkers.IntegerRangeChecker',
     'scriptlet.xml.workflow.checkers.IntegerRangeChecker'    
   );
 
@@ -28,7 +26,7 @@
     public function __construct() {
       $this->registerParamInfo(
         'event_id',
-        OCCURRENCE_PASSBEHIND,
+        Wrapper::OCCURRENCE_PASSBEHIND,
         NULL,
         NULL,
         NULL,
@@ -36,7 +34,7 @@
       );
       $this->registerParamInfo(
         'player_id',
-        OCCURRENCE_PASSBEHIND,
+        Wrapper::OCCURRENCE_PASSBEHIND,
         NULL,
         NULL,
         NULL,
@@ -44,7 +42,7 @@
       );
       $this->registerParamInfo(
         'firstname',
-        OCCURRENCE_OPTIONAL,
+        Wrapper::OCCURRENCE_OPTIONAL,
         NULL,
         NULL,
         NULL,
@@ -52,7 +50,7 @@
       );
       $this->registerParamInfo(
         'lastname',
-        OCCURRENCE_OPTIONAL,
+        Wrapper::OCCURRENCE_OPTIONAL,
         NULL,
         NULL,
         NULL,
@@ -60,7 +58,7 @@
       );
       $this->registerParamInfo(
         'attend',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         NULL,
         NULL,
@@ -68,7 +66,7 @@
       );
       $this->registerParamInfo(
         'needs_seat',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         array('scriptlet.xml.workflow.casters.ToBoolean'),
         NULL,
@@ -76,7 +74,7 @@
       );
       $this->registerParamInfo(
         'offers_seats',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         NULL,
         NULL,
@@ -84,7 +82,7 @@
       );
       $this->registerParamInfo(
         'fetch_key',
-        OCCURRENCE_UNDEFINED,
+        Wrapper::OCCURRENCE_UNDEFINED,
         NULL,
         array('scriptlet.xml.workflow.casters.ToBoolean'),
         NULL,
