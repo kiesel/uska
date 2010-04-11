@@ -75,7 +75,7 @@
       return newinstance('scriptlet.RequestAuthenticator', array(), '{
         public function authenticate($request, $response, $context) {
           $cat= Logger::getInstance()->getCategory();
-          $cat->debug("Authentication to be performed for", $request->getURI(), $context);
+          $cat->debug("Authentication to be performed for", $request->getURL(), $context);
 
           if (!$request->state->requiresAuthentication()) {
             $cat->debug("No auth because state not requiring it.");
@@ -92,7 +92,7 @@
           $cat->debug("Authentication required - initiating login...");
 
           // Dispatch - LoginHandler will redirect to original state
-          $request->session->putValue("authreturn", $request->getURI());
+          $request->session->putValue("authreturn", $request->getURL());
           $response->forwardTo("login");
         }
       }');

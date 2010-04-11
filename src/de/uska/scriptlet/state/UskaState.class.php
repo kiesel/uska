@@ -50,7 +50,7 @@
         if (!$context->user instanceof Player) {
 
           // Store return point in session
-          $request->session->putValue('authreturn', $request->getURI());
+          $request->session->putValue('authreturn', $request->getURL());
 
           // Send redirect
           $response->forwardTo('login');

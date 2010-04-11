@@ -40,17 +40,11 @@
           $this->cat->info('Logged in user by cookie:', $context->user);
           
           $return= $request->session->getValue('authreturn');
-
+          $this->cat->debug('Stored return information', $return);
+          
           if ($return) {
-            $this->cat->debug('Returning to', $return);
-
             $request->session->removeValue('authreturn');
-            $response->sendRedirect(sprintf('%s://%s%s%s',
-              $return['scheme'],
-              $return['host'],
-              $return['path'],
-              $return['query'] ? '?'.$return['query']: ''
-            ));
+            $response->sendRedirect($return->getURL());
             return FALSE;
           }
         }
