@@ -6,6 +6,22 @@ Version ?.?.?, released ????-??-??
 ----------------------------------
 SVN version: ?????
 
+Version 2.1.4, released 2010-04-12
+----------------------------------
+SVN version: ?????
+
+Bugfixes
+~~~~~~~~
+- Fixed bug with returning to the page the user was on before authentication
+  - query part of URL had been forgotten.
+  (kiesel)
+
+Features
+~~~~~~~~
+- Made database classes & queries non-qualified to make them work on all
+  hosts
+  (kiesel)
+
 Version 2.1.3, released 2010-03-01
 ----------------------------------
 SVN version: ?????
