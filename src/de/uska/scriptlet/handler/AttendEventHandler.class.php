@@ -123,9 +123,9 @@
       }
       
       $attendee= $this->wrapper->getPlayer_id();
+      $db= ConnectionManager::getInstance()->getByHost('uska', 0);
+      $transaction= $db->begin(new Transaction('attend'));
       try {
-        $db= ConnectionManager::getInstance()->getByHost('uskadb', 0);
-        $transaction= $db->begin(new Transaction('attend'));
         
         // Check if this is a guest attendee
         if ('addguest' == $this->getValue('mode')) {
