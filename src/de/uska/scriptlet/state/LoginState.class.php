@@ -33,23 +33,6 @@
      * @param   scriptlet.xml.Context context
      */
     public function setup($request, $response, $context) {
-      
-      // Check for auto-login
-      if ($request->hasCookie(UskaState::LOGINCOOKIE)) {
-        if (TRUE === $context->authenticateUserByCookie($request->getCookie(UskaState::LOGINCOOKIE))) {
-          $this->cat->info('Logged in user by cookie:', $context->user);
-          
-          $return= $request->session->getValue('authreturn');
-          $this->cat->debug('Stored return information', $return);
-          
-          if ($return) {
-            $request->session->removeValue('authreturn');
-            $response->sendRedirect($return->getURL());
-            return FALSE;
-          }
-        }
-      }
-
       parent::setup($request, $response, $context);
       
       if ($request->hasParam('logout')) {
@@ -58,9 +41,7 @@
         // Store hint in session, to easily tell if user is logged in
         $request->session->removeValue('logged-in');
 
-
         $context->setUser($n= NULL);
-        $response->setCookie(new Cookie(UskaState::LOGINCOOKIE, '', time() - 1000, '/'));
         $response->setCookie(new Cookie('psessionid', '', time() - 1000, '/'));
       
         $uri= $request->getURI();

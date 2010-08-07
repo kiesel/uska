@@ -15,8 +15,6 @@
    * @purpose  Base state
    */
   class UskaState extends AbstractState {
-    const
-      LOGINCOOKIE   = 'uska-loginname';
       
     /**
      * Constructor.
@@ -35,30 +33,6 @@
      * @param   scriptlet.xml.Context context
      */
     public function setup($request, $response, $context) {
-      $autologin= FALSE;
-    
-      // Login user, if auto-login is enabled through cookie
-      if ($request->hasCookie(self::LOGINCOOKIE)) {
-        list ($username, $hash)= explode('|', $request->getCookie(self::LOGINCOOKIE)->getValue());
-        if ($hash == md5($username.PropertyManager::getInstance()->getProperties('product')->readString('login', 'secret'))) {
-          $autologin= TRUE;
-        }
-      }
-    
-      // Automatically handle authentication if state indicates so
-      if ($this->requiresAuthentication() || $autologin) {
-        if (!$context->user instanceof Player) {
-
-          // Store return point in session
-          $request->session->putValue('authreturn', $request->getURL());
-
-          // Send redirect
-          $response->forwardTo('login');
-          
-          return FALSE;
-        }
-      }
-      
       $response->addFormResult(Node::fromArray(
         PropertyManager::getInstance()->getProperties('product')->readSection('web'),
         'config'

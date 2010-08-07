@@ -64,22 +64,11 @@
       // Store hint in session, to easily tell if user is logged in
       $request->session->putValue('logged-in', 1);
 
-      // Remember user if he requests so
-      if ($request->getParam('remember') == 'yes') {
-        $secret= PropertyManager::getInstance()->getProperties('product')->readString('login', 'secret');
-        
-        $response->setCookie(new Cookie(
-          UskaState::LOGINCOOKIE,
-          $context->user->getUsername().'|'.md5($context->user->getUsername().$secret),
-          time() + (86400 * 365),  // one year
-          '/'
-        ));
-      }
-
       $return= $request->session->getValue('authreturn');
+	  $this->cat->debug('Have return page:', $return);
 
-      if ($return) {
-        $this->cat->debug('Redirect to', $return);
+      if ($return instanceof HttpScriptletURL) {
+        $this->cat->debug('Redirect to', $return->getURL());
         
         $request->session->removeValue('authreturn');
         $response->sendRedirect($return->getURL());
