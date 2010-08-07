@@ -75,36 +75,14 @@
           </table>
         </fieldset>
         
-        <!-- Mailinglist settings -->
-        <fieldset>
-          <legend>Mailinglisten</legend>
-          
-          <table>
-            <xsl:for-each select="/formresult/handlers/handler[@name= 'editplayerhandler']/values/mailinglists/mailinglist">
-              <tr>
-                <td><xsl:value-of select="address"/></td>
-                <td>
-                  <xsl:variable name="name" select="concat('mailinglist[ml_', mailinglist_id, ']')"/>
-                  <input type="checkbox" name="mailinglist[ml_{mailinglist_id}]" value="1">
-                    <xsl:if test="/formresult/formvalues/param[@name= $name] != ''">
-                      <xsl:attribute name="checked">checked</xsl:attribute>
-                    </xsl:if>
-                  </input>
-                  angemeldet
-                </td>
-              </tr>
-            </xsl:for-each>
-          </table>
-        </fieldset>
-        
-      <table>
-        <tr>
-          <td colspan="3" align="right">
-            <input type="submit" name="submit" value="Einstellungen speichern"/>
-          </td>
-        </tr>
-      </table>
-    </div>
+        <table>
+          <tr>
+            <td colspan="3" align="right">
+              <input type="submit" name="submit" value="Einstellungen speichern"/>
+            </td>
+          </tr>
+        </table>
+      </div>
     </xsl:if>
     </form>
   </xsl:template>

@@ -76,11 +76,9 @@
       }
       
       // Select teams
-      $pm= PropertyManager::getInstance();
-      $prop= $pm->getProperties('product');
-      $cm= ConnectionManager::getInstance();
+      $prop= PropertyManager::getInstance()->getProperties('product');
       
-      $db= $cm->getByHost('uska', 0);
+      $db= ConnectionManager::getInstance()->getByHost('uska', 0);
       $teams= $db->select('
           team_id,
           name
@@ -91,31 +89,6 @@
       );
 
       $this->setValue('teams', $teams);
-      
-      // Select mailinglists
-      $mls= $db->select('
-          m.mailinglist_id,
-          m.name,
-          m.address,
-          mpm.player_id as subscribed
-        from
-          mailinglist as m
-            left outer join mailinglist_player_matrix as mpm
-          on
-            m.mailinglist_id= mpm.mailinglist_id
-            and mpm.player_id= %d
-        ',
-        $request->getParam('player_id', NULL)
-      );
-      
-      foreach ($mls as $m) {
-        $this->setFormValue(
-          'mailinglist[ml_'.$m['mailinglist_id'].']',
-          $m['subscribed']
-        );
-      }
-      $this->setValue('mailinglists', $mls);
-
       return TRUE;
     }
       
@@ -127,16 +100,11 @@
      * @return  bool
      */
     public function handleSubmittedData($request, $context) {
-      $log= Logger::getInstance();
-      $cat= $log->getCategory();
+      $cat= Logger::getInstance()->getCategory();
       
       switch ($this->getValue('mode')) {
         case 'update':
-          try {
-            $player= Player::getByPlayer_id($this->wrapper->getPlayer_id());
-          } catch (SQLException $e) {
-            throw($e);
-          }
+          $player= Player::getByPlayer_id($this->wrapper->getPlayer_id());
           break;
         
         case 'create':
@@ -180,78 +148,13 @@
       
       // Now insert or update...
       try {
-        $peer= Player::getPeer();
-        $transaction= $peer->begin(new Transaction('editplayer'));
-        
-        $cm= ConnectionManager::getInstance();
-        $db= $cm->getByHost($peer->connection, 0);
+		$db= Player::getPeer()->getConnection();
+        $transaction= $db->begin(new Transaction('editplayer'));
         
         if ($this->getValue('mode') == 'update') {
           $player->update();
         } else {
           $player->insert();
-        }
-        
-        // If email was changed, update all mailinglists
-        $mls= $this->getValue('mailinglists');
-        if ($oldemail) {
-          foreach ($mls as $mailinglist) {
-            $ezmlm= new EzmlmSqlUtil('ezmlm', $mailinglist['name']);
-            $ezmlm->setConnection($db);
-            $ezmlm->alterAddress($oldemail, $player->getEmail());
-          }
-        }
-        
-        // Mailinglist management
-        $newml= $this->wrapper->getMailinglist();
-        foreach ($mls as $mailinglist) {
-
-          if (!empty($newml['ml_'.$mailinglist['mailinglist_id']])) {
-            $found= FALSE;
-            try {
-              $db->insert('into mailinglist_player_matrix (
-                  mailinglist_id,
-                  player_id,
-                  lastchange,
-                  changedby
-                ) values (
-                  %d,
-                  %d,
-                  %s,
-                  %s
-                )',
-                $mailinglist['mailinglist_id'],
-                $player->getPlayer_id(),
-                Date::now(),
-                $context->user->getUsername()
-              );
-            } catch (SQLStatementFailedException $ignored) {
-              // already there, ok...
-              $found= TRUE;
-            }
-
-            if (!$found) {
-              $ezmlm= new EzmlmSqlUtil('ezmlm', $mailinglist['name']);
-              $ezmlm->setConnection($db);
-              $ezmlm->addSubscriber($player->getEmail());
-            }
-          } else {
-            $cnt= $db->delete('
-              from 
-                mailinglist_player_matrix
-              where player_id= %d
-                and mailinglist_id= %d
-              ',
-              $player->getPlayer_id(),
-              $mailinglist['mailinglist_id']
-            );
-
-            if ($cnt) {
-              $ezmlm= new EzmlmSqlUtil('ezmlm', $mailinglist['name']);
-              $ezmlm->setConnection($db);
-              $ezmlm->removeSubscriber($player->getEmail());
-            }
-          }
         }
       } catch (SQLException $e) {
         $transaction->rollback();
