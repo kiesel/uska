@@ -52,22 +52,25 @@
 
       $player_id= $context->user->getPlayer_id();
       
-      // Check for "su" attending mode (admin)
-      if (
-        $request->hasParam('player_id') && 
-        $request->getParam('player_id') != $player_id &&
-        $context->hasPermission('create_player')
-      ) {
-        $player_id= $request->getParam('player_id');
+      // Check when editing foreign records
+      if ($request->hasParam('player_id') && $request->getParam('player_id') != $player_id) {
+        $player= Player::getByPlayer_id($request->getParam('player_id'));
+
+        // Check that the user either has admin privileges, or is the creator
+        // of the chosen guest player
+        if (
+          $context->hasPermission('create_player') || 
+          ($player->getPlayer_type_id() == 2 && $player->getCreated_by() == $context->user->getPlayer_id())
+        ) {
+          $player_id= $request->getParam('player_id');
+        }
       }
+      
+      // Fetch player if not previously fetched
+      if (!$player instanceof Player) $player= Player::getByPlayer_id($player_id);
       
       // Check if we're updating or inserting later
       $attendee= Event_attendee::getByEvent_idPlayer_id($request->getParam('event_id'), $player_id);
-      if ($player_id == $context->user->getPlayer_id()) {
-        $player= $context->user;
-      } else {
-        $player= Player::getByPlayer_id($player_id);
-      }
       
       if ($attendee instanceof Event_attendee) {
         $this->setFormValue('attend', $attendee->getAttend());
@@ -75,7 +78,7 @@
         $this->setFormValue('needs_seat', $attendee->getNeeds_driver());
         $this->setFormValue('fetch_key', $attendee->getFetch_key());
         
-        if ($this->getvalue('mode') != 'addguest') {
+        if ($this->getValue('mode') != 'addguest') {
           $this->setFormvalue('firstname', $player->getFirstname());
           $this->setFormValue('lastname', $player->getLastname());
         }
@@ -129,12 +132,11 @@
           $this->addError('no_guests');
         }
       }
-          
-      if ($this->errorOcurred()) return FALSE;
+
+      if ($this->errorsOccured()) return FALSE;
       
       $attendee= $this->wrapper->getPlayer_id();
-      $db= ConnectionManager::getInstance()->getByHost('uska', 0);
-      $transaction= $db->begin(new Transaction('attend'));
+      $transaction= Player::getPeer()->getConnection()->begin(new Transaction('attend'));
       try {
         
         if ('addguest' == $this->getValue('mode')) {
