@@ -110,7 +110,6 @@
       if ($this->wrapper->getNeeds_seat() && $this->wrapper->getOffers_seats() > 0) {
         $this->addError('mutex-fail', 'needs_seat');
         $this->addError('mutex-fail', 'offers_seats');
-        return FALSE;
       }
       
       if (
@@ -119,26 +118,27 @@
       ) {
         $this->addError('missing', 'firstname');
         $this->addError('missing', 'lastname');
-        return FALSE;
       }
+      
+      // Check if this is a guest attendee
+      $event= Event::getByEvent_id($this->wrapper->getEvent_id());
+      if ('addguest' == $this->getValue('mode')) {
+
+        // Prevent adding guests to events without such.
+        if (!$event->getAllow_guests()) {
+          $this->addError('no_guests');
+        }
+      }
+          
+      if ($this->errorOcurred()) return FALSE;
       
       $attendee= $this->wrapper->getPlayer_id();
       $db= ConnectionManager::getInstance()->getByHost('uska', 0);
       $transaction= $db->begin(new Transaction('attend'));
       try {
         
-        // Check if this is a guest attendee
         if ('addguest' == $this->getValue('mode')) {
 
-          $event= Event::getByEvent_id($this->wrapper->getEvent_id());
-          
-          // Prevent adding guests to events without such.
-          if (!$event->getAllow_guests()) {
-            $transaction->rollback();
-            $this->addError('no_guests');
-            return FALSE;
-          }
-          
           // Create guest player
           $player= new Player();
           $player->setFirstname($this->wrapper->getFirstname());
@@ -169,8 +169,7 @@
         $eventattend->save();
         
         // Check on current number of attendees
-        $event= Event::getByEvent_id($this->wrapper->getEvent_id());
-        $count= array_shift($db->select('
+        $count= $db->query('
           count(*) as attendees
           from
             event as e,
@@ -180,26 +179,26 @@
             and a.attend= 1
           ',
           $event->getEvent_id()
-        ));
+        )->next('attendees');
+      
+        // Allow unattending, but do not allow attending when max_attendees 
+        // has been reached.
+        if (
+          $eventattend->getAttend() !== 0 && 
+          $count['attendees'] > $event->getMax_attendees() &&
+          !$context->hasPermission('create_event')
+        ) {
+          $this->addError('too_many_attendees', '*');
+          $transaction->rollback();
+          return FALSE;
+        }
+        
+        $transaction->commit();
+        return TRUE;
       } catch (SQLException $e) {
         $transaction->rollback();
         throw $e;
       }
-      
-      // Allow unattending, but do not allow attending when max_attendees 
-      // has been reached.
-      if (
-        $eventattend->getAttend() !== 0 && 
-        $count['attendees'] > $event->getMax_attendees() &&
-        !$context->hasPermission('create_event')
-      ) {
-        $this->addError('too_many_attendees', '*');
-        $transaction->rollback();
-        return FALSE;
-      }
-      
-      $transaction->commit();
-      return TRUE;
     }
     
     /**
