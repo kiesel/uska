@@ -168,31 +168,6 @@
         $eventattend->setLastchange(Date::now());
         $eventattend->save();
         
-        // Check on current number of attendees
-        $count= $db->query('
-          count(*) as attendees
-          from
-            event as e,
-            event_attendee as a
-          where e.event_id= %d
-            and e.event_id= a.event_id
-            and a.attend= 1
-          ',
-          $event->getEvent_id()
-        )->next('attendees');
-      
-        // Allow unattending, but do not allow attending when max_attendees 
-        // has been reached.
-        if (
-          $eventattend->getAttend() !== 0 && 
-          $count['attendees'] > $event->getMax_attendees() &&
-          !$context->hasPermission('create_event')
-        ) {
-          $this->addError('too_many_attendees', '*');
-          $transaction->rollback();
-          return FALSE;
-        }
-        
         $transaction->commit();
         return TRUE;
       } catch (SQLException $e) {
