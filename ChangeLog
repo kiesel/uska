@@ -6,6 +6,25 @@ Version ?.?.?, released ????-??-??
 ----------------------------------
 SVN version: ?????
 
+Bugfixes
+~~~~~~~~
+- Fixed bug that only admins were able to edit attend information
+  for guest players
+  (kiesel)
+- Fixed bug that after login users have not been redirected back to
+  the page they actually wanted to visit
+
+Heads up!
+~~~~~~~~~
+- Removed checks for max. number of attendees for an event
+  (kiesel)
+
+Features
+~~~~~~~~
+- Made RSS feed work
+  (kiesel)
+
+
 Version 2.1.4, released 2010-04-12
 ----------------------------------
 SVN version: ?????
