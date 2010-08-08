@@ -7,8 +7,7 @@
   uses(
     'scriptlet.xml.workflow.Handler',
     'de.uska.scriptlet.wrapper.EditPlayerWrapper',
-    'de.uska.db.Player',
-    'de.uska.EzmlmSqlUtil'
+    'de.uska.db.Player'
   );
 
   /**
@@ -77,9 +76,7 @@
       
       // Select teams
       $prop= PropertyManager::getInstance()->getProperties('product');
-      
-      $db= ConnectionManager::getInstance()->getByHost('uska', 0);
-      $teams= $db->select('
+      $teams= ConnectionManager::getInstance()->getByHost('uska', 0)->select('
           team_id,
           name
         from
@@ -148,8 +145,7 @@
       
       // Now insert or update...
       try {
-		$db= Player::getPeer()->getConnection();
-        $transaction= $db->begin(new Transaction('editplayer'));
+        $transaction= Player::getPeer()->getConnection()->begin(new Transaction('editplayer'));
         
         if ($this->getValue('mode') == 'update') {
           $player->update();

@@ -12,7 +12,7 @@
  extension-element-prefixes="func"
 >
 
-  <xsl:include href="layout.xsl"/>
+  <xsl:import href="layout.xsl"/>
   <xsl:include href="../news.inc.xsl"/>
   <xsl:include href="../wizard.inc.xsl"/>
   <xsl:include href="calendar.inc.xsl"/>
