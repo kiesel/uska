@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xsi:schemaLocation='null http://ant.apache.org/ivy/schemas/ivy.xsd'
+   version="2.0">
+  <info organisation="name.kiesel" module="uska" revision="2.1.5" status="release"/>
+  <configurations>
+    <conf name="default" description="Standard build"/>
+    <conf name="test" description="Test build"/>
+  </configurations>
+  <publications>
+    <artifact name="uska" type="xar" ext="xar" conf="default"/>
+    <artifact name="uska-web" type="zip" ext="zip" conf="default"/>
+  </publications>
+  <dependencies>
+    <dependency org="net.xp_framework" name="core" rev="5.8"/>
+  </dependencies>
+</ivy-module>
