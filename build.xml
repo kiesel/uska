@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="ISO-8859-15"?>
 <project name="uska">
-  <import file="${user.home}/.ant/xp-build/build-master.xml"/>
-
-  
+  <import file="${user.home}/.ant/xp-build/build-loader.xml"/>
 </project>
