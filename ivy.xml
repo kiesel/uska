@@ -9,9 +9,9 @@
   </configurations>
   <publications>
     <artifact name="uska" type="xar" ext="xar" conf="default"/>
-    <artifact name="uska-web" type="zip" ext="zip" conf="default"/>
+    <artifact name="uska-webapp" type="zip" ext="zip" conf="default"/>
   </publications>
   <dependencies>
-    <dependency org="net.xp_framework" name="core" rev="5.8"/>
+    <dependency org="net.xp_framework" name="core" rev="5.8" conf="default->default; test->test"/>
   </dependencies>
 </ivy-module>
