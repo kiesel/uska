@@ -10,10 +10,15 @@
   <packaging>xar</packaging>
 
   <properties>
+
+    <!-- xp-maven-plugin packaging instructions -->
     <xp.package.strategy>app</xp.package.strategy>
     <xp.package.format>zip</xp.package.format>
     <xp.package.packDependencies>true</xp.package.packDependencies>
     <xp.package.packRuntime>true</xp.package.packRuntime>
+
+    <!-- Encoding -->
+    <project.build.sourceEncoding>iso-8859-15</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
@@ -32,6 +37,14 @@
   </dependencies>
 
   <build>
+    <!-- <resources>
+      <resource>
+        <directory>${basedir}/src/main/etc</directory>
+        <targetPath>${basedir}/target/etc</targetPath>
+        <filtering>true</filtering>
+      </resource>
+    </resources> -->
+
     <plugins>
       <plugin>
         <groupId>net.xp-forge.maven.plugins</groupId>
@@ -49,6 +62,20 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>2.4</version>
       </plugin>
+      <!-- <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.2.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+        </configuration>
+      </plugin> -->
     </plugins>
   </build>
 
