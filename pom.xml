@@ -49,8 +49,31 @@
       <plugin>
         <groupId>net.xp-forge.maven.plugins</groupId>
         <artifactId>xp-maven-plugin</artifactId>
-        <version>3.1.8</version>
+        <version>3.2.13-SNAPSHOT</version>
         <extensions>true</extensions>
+
+        <executions>
+          <execution>
+            <phase>install</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <!-- <code>echo "Hello World";</code> -->
+          <command>de.uska.cmd.Deploy</command>
+          <configs>
+            <config>${project.build.directory}/etc</config>
+            <config>${project.build.directory}/etc/prod</config>
+          </configs>
+          <arguments>
+            <argument>--artifact=${settings.localRepository}${file.separator}${project.groupId}${file.separator}${project.name}${file.separator}${project.version}${file.separator}${project.build.finalName}.${project.packaging}</argument>
+            <argument>--host=uska.de</argument>
+            <argument>--user=u34002701</argument>
+            <argument>--path=/kunden/homepages/15/d69847279/htdocs/uska-xp</argument>
+          </arguments>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -62,30 +85,7 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>2.4</version>
       </plugin>
-
-      <!-- <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.2.1</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-        </configuration>
-      </plugin> -->
     </plugins>
-
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-         <artifactId>wagon-ssh-external</artifactId>
-         <version>1.0-beta-6</version>
-      </extension>
-    </extensions>
   </build>
 
   <!-- Source code management -->
@@ -100,12 +100,4 @@
     <system>GitHub</system>
     <url>https://github.com/kiesel/uska/issues</url>
   </issueManagement>
-
-  <!-- Distribution -->
-  <distributionManagement>
-    <repository>
-      <id>uska-repository</id>
-      <url>scpexe://uska.de/kunden/homepages/15/d69847279/htdocs/artifacts/</url>
-    </repository>
-  </distributionManagement>
 </project>

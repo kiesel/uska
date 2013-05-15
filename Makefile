@@ -1,16 +1,9 @@
 # Makefile for the uska.de website
 #
-# $Id$ 
+# $Id$
 
-XPCLI_CMD?=xpcli
-
-XP_VERSION=5.7.10
 SCRIPTLET_PACKAGE=de.uska.scriptlet
-
-include ../../Mk/common.mk
-include ../../Mk/dist.mk
-include ../../Mk/wrapper/generate.mk
-
+TARGET_HOST=u34002701@uska.de:~/uska-xp/
 
 dbclasses:
 	@xpcli net.xp_framework.db.generator.DataSetCreator -c conf/db/uska/config.ini
@@ -18,9 +11,9 @@ dbclasses:
       xpcli net.xp_framework.db.generator.DataSetCreator -c conf/db/uska/config.ini -X $$i -O classes ; \
     done
 
-install:
-	@scp ../$(PROJECT_NAME)-$(PROJECT_VERSION).tar.gz u34002701@uska.de:~/uska-xp/
-	@echo "cd uska-xp && tar xvzf $(PROJECT_NAME)-$(PROJECT_VERSION).tar.gz ; mv $(PROJECT_NAME) $(PROJECT_NAME)-$(PROJECT_VERSION)" | ssh u34002701@uska.de
+install.real:
+	@scp target/uska-$(PROJECT_VERSION).zip $(TARGET_HOST)
+	@echo "cd uska-xp && unzip uska-$(PROJECT_VERSION).tar.gz ; mv uska uska-$(PROJECT_VERSION)" | ssh u34002701@uska.de
 	@echo "cd uska-xp && cp uska-current/etc/database.ini $(PROJECT_NAME)-$(PROJECT_VERSION)/etc/" | ssh u34002701@uska.de
 
 activate:
