@@ -1,12 +1,7 @@
 RewriteEngine On
-RewriteRule xml/ /index.php [PT]
+RewriteRule .* /web.php [PT,L,NE]
 
-DirectoryIndex index.php index.html
-
-SetEnv DEF_PROD uska
-SetEnv DEF_LANG de_DE
-SetEnv DEF_STATE events
-
+DirectoryIndex web.php
 
 CheckSpelling off
 AddType x-mapp-php5 .php
