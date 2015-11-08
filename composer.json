@@ -1,0 +1,16 @@
+{
+    "name": "kiesel/uska",
+    "description": "USKA Team Website",
+    "require": {
+        "xp-framework/core": "~6.5",
+        "xp-framework/rdbms": "~6.4",
+        "xp-framework/scriptlet": "~6.2"
+    },
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Alex D'Andrea",
+            "email": "alex@dandrea.io"
+        }
+    ]
+}
