@@ -63,7 +63,7 @@ class UskaContext extends Context {
       $n->addChild(Node::fromArray(array_keys($this->permissions), 'permissions'));
     }
     
-    $enode= $response->addFormResult(new \node('eventtypes'));
+    $enode= $response->addFormResult(new Node('eventtypes'));
     foreach ($this->eventtypes as $id => $desc) {
       $enode->addChild(new Node('type', $desc['name'], array(
         'id' => $id,
