@@ -1,37 +1,33 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace de\uska\scriptlet\state;
 
-  uses('de.uska.scriptlet.state.UskaState', 'de.uska.scriptlet.handler.AttendEventHandler');
+use de\uska\scriptlet\handler\AttendEventHandler;
+use de\uska\scriptlet\state\UskaState;
+
+/**
+ * (Insert class' description here)
+ *
+ * @ext      extension
+ * @see      reference
+ * @purpose  purpose
+ */
+class AttendEventState extends UskaState {
+  
+  /**
+   * (Insert method's description here)
+   *
+   * @param   
+   * @return  
+   */
+  public function requiresAuthentication() { return true; }
 
   /**
-   * (Insert class' description here)
+   * (Insert method's description here)
    *
-   * @ext      extension
-   * @see      reference
-   * @purpose  purpose
+   * @param   
+   * @return  
    */
-  class AttendEventState extends UskaState {
-    
-    /**
-     * (Insert method's description here)
-     *
-     * @param   
-     * @return  
-     */
-    public function requiresAuthentication() { return TRUE; }
-
-    /**
-     * (Insert method's description here)
-     *
-     * @param   
-     * @return  
-     */
-    public function setup($request, $response, $context) {
-      $this->addHandler(new AttendEventHandler());
-      parent::setup($request, $response, $context);
-    }
+  public function setup($request, $response, $context) {
+    $this->addHandler(new AttendEventHandler());
+    parent::setup($request, $response, $context);
   }
-?>
+}

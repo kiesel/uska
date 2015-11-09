@@ -1,111 +1,106 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace de\uska\scriptlet\state;
+
+use de\uska\db\Event;
+use de\uska\db\Player;
+use de\uska\markup\FormresultHelper;
+use de\uska\scriptlet\state\UskaState;
+use rdbms\ConnectionManager;
+use util\Date;
+use xml\Node;
+
+/**
+ * View details for an event
  *
- * $Id$ 
+ * @purpose  View event
  */
-
-  uses(
-    'de.uska.scriptlet.state.UskaState',
-    'de.uska.markup.FormresultHelper',
-    'de.uska.db.Event',
-    'de.uska.db.Player',
-    'util.DateUtil'
-  );
-
+class ViewEventState extends UskaState {
+  
   /**
-   * View details for an event
+   * Process this state.
    *
-   * @purpose  View event
+   * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request 
+   * @param   scriptlet.xml.XMLScriptletResponse response 
+   * @param   scriptlet.xml.Context context
+   * @return  bool
    */
-  class ViewEventState extends UskaState {
+  public function process($request, $response, $context) {
+    parent::process($request, $response, $context);
     
-    /**
-     * Process this state.
-     *
-     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request 
-     * @param   scriptlet.xml.XMLScriptletResponse response 
-     * @param   scriptlet.xml.Context context
-     * @return  bool
-     */
-    public function process($request, $response, $context) {
-      parent::process($request, $response, $context);
-      
-      $event= Event::getByEvent_id(intval($request->getQueryString()));
-      if (!$event instanceof Event) return FALSE;
+    $event= Event::getByEvent_id(intval($request->getQueryString()));
+    if (!$event instanceof Event) return false;
 
-      $db= ConnectionManager::getInstance()->getByHost('uska', 0);
-      $query= $db->query('
-        select
-          p.player_id,
-          p.firstname,
-          p.lastname,
-          p.player_type_id,
-          p.created_by,
-          a.offers_seats,
-          a.needs_driver,
-          a.attend,
-          a.fetch_key
-        from
-          event as e
-          join player as p on p.team_id= e.team_id
-          left outer join event_attendee as a on p.player_id= a.player_id and a.event_id= e.event_id
-        where p.player_type_id= 1
-          and p.bz_id= 20000
-          and e.event_id= %1$d
+    $db= ConnectionManager::getInstance()->getByHost('uska', 0);
+    $query= $db->query('
+      select
+        p.player_id,
+        p.firstname,
+        p.lastname,
+        p.player_type_id,
+        p.created_by,
+        a.offers_seats,
+        a.needs_driver,
+        a.attend,
+        a.fetch_key
+      from
+        event as e
+        join player as p on p.team_id= e.team_id
+        left outer join event_attendee as a on p.player_id= a.player_id and a.event_id= e.event_id
+      where p.player_type_id= 1
+        and p.bz_id= 20000
+        and e.event_id= %1$d
 
-        union select
-          p.player_id,
-          p.firstname,
-          p.lastname,
-          p.player_type_id,
-          p.created_by,
-          a.offers_seats,
-          a.needs_driver,
-          a.attend,
-          a.fetch_key
-        from
-          event_attendee as a,
-          player as p
-        where p.player_id= a.player_id
-          and p.player_type_id= 2
-          and a.event_id= %1$d
-          and a.attend= 1
+      union select
+        p.player_id,
+        p.firstname,
+        p.lastname,
+        p.player_type_id,
+        p.created_by,
+        a.offers_seats,
+        a.needs_driver,
+        a.attend,
+        a.fetch_key
+      from
+        event_attendee as a,
+        player as p
+      where p.player_id= a.player_id
+        and p.player_type_id= 2
+        and a.event_id= %1$d
+        and a.attend= 1
 
-        order by
-          attend desc, player_type_id, lastname, firstname
-        ',
-        $event->getEvent_id()
-      );
+      order by
+        attend desc, player_type_id, lastname, firstname
+      ',
+      $event->getEvent_id()
+    );
+    
+    // Convert event object into array, so we can add it without
+    // the description member (which needs markup processing)
+    $eventarr= (array)get_object_vars($event);
+    unset($eventarr['description']);
+    
+    $attendeesCount= 0;
+    $n= new Node('attendeeinfo');
+    while ($query && $record= $query->next()) {
+      $t= $n->addChild(new Node('player', null, $record));
       
-      // Convert event object into array, so we can add it without
-      // the description member (which needs markup processing)
-      $eventarr= (array)get_object_vars($event);
-      unset($eventarr['description']);
-      
-      $attendeesCount= 0;
-      $n= new Node('attendeeinfo');
-      while ($query && $record= $query->next()) {
-        $t= $n->addChild(new Node('player', NULL, $record));
-        
-        // For guests, select creator
-        if (2 == $record['player_type_id']) {
-          $t->addChild(Node::fromObject(Player::getByPlayer_id($record['created_by']), 'creator'));
-        }
-        
-        // Count attendees
-        if ($record['attend']) $attendeesCount++;
+      // For guests, select creator
+      if (2 == $record['player_type_id']) {
+        $t->addChild(Node::fromObject(Player::getByPlayer_id($record['created_by']), 'creator'));
       }
       
-      // Check whether this event is still subscribeable
-      $eventarr['subscribeable']= (int)
-        ((!$event->getDeadline() || $event->getDeadline()->isAfter(Date::now())) && 
-        $event->getTarget_date()->isAfter(Date::now()) &&
-        (!$event->getMax_Attendees() || $attendeesCount < $event->getMax_attendees())
-      );
-      
-      $node= $response->addFormResult(Node::fromArray($eventarr, 'event'));
-      $node->addChild(FormresultHelper::markupNodeFor('description', $event->getDescription()));
-      $node->addChild($n);
+      // Count attendees
+      if ($record['attend']) $attendeesCount++;
     }
+    
+    // Check whether this event is still subscribeable
+    $eventarr['subscribeable']= (int)
+      ((!$event->getDeadline() || $event->getDeadline()->isAfter(Date::now())) && 
+      $event->getTarget_date()->isAfter(Date::now()) &&
+      (!$event->getMax_Attendees() || $attendeesCount < $event->getMax_attendees())
+    );
+    
+    $node= $response->addFormResult(Node::fromArray($eventarr, 'event'));
+    $node->addChild(FormresultHelper::markupNodeFor('description', $event->getDescription()));
+    $node->addChild($n);
   }
-?>
+}

@@ -1,42 +1,35 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id$ 
- */
+<?php namespace de\uska\scriptlet\state;
 
-  uses(
-    'de.uska.scriptlet.state.UskaState',
-    'de.uska.scriptlet.handler.EditEventHandler'
-  );
+use de\uska\scriptlet\handler\EditEventHandler;
+use de\uska\scriptlet\state\UskaState;
+
+/**
+ * Edit single event
+ *
+ * @ext      extension
+ * @see      reference
+ * @purpose  purpose
+ */
+class EditEventState extends UskaState {
 
   /**
-   * Edit single event
+   * Retrieve whether authentication is needed.
    *
-   * @ext      extension
-   * @see      reference
-   * @purpose  purpose
+   * @return  bool
    */
-  class EditEventState extends UskaState {
-
-    /**
-     * Retrieve whether authentication is needed.
-     *
-     * @return  bool
-     */
-    public function requiresAuthentication() {
-      return TRUE;
-    }
-    
-    /**
-     * Setup the state
-     *
-     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request 
-     * @param   scriptlet.xml.XMLScriptletResponse response 
-     * @param   scriptlet.xml.Context context
-     */
-    public function setup($request, $response, $context) {
-      $this->addHandler(new EditEventHandler());
-      parent::setup($request, $response, $context);
-    }
+  public function requiresAuthentication() {
+    return true;
   }
-?>
+  
+  /**
+   * Setup the state
+   *
+   * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request 
+   * @param   scriptlet.xml.XMLScriptletResponse response 
+   * @param   scriptlet.xml.Context context
+   */
+  public function setup($request, $response, $context) {
+    $this->addHandler(new EditEventHandler());
+    parent::setup($request, $response, $context);
+  }
+}

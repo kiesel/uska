@@ -1,17 +1,12 @@
-<?php
-/* This class is part of the XP framework
+<?php namespace de\uska\scriptlet\state;
+
+use de\uska\scriptlet\state\UskaState;
+
+/**
+ * About state. Does nothing.
  *
- * $Id$ 
+ * @purpose  Display about information.
  */
+class AboutState extends UskaState {
 
-  uses('de.uska.scriptlet.state.UskaState');
-
-  /**
-   * About state. Does nothing.
-   *
-   * @purpose  Display about information.
-   */
-  class AboutState extends UskaState {
-  
-  }
-?>
+}

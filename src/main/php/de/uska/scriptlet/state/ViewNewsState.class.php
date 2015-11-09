@@ -1,73 +1,74 @@
-<?php
-/* This class is part of the XP framework
- *
- * $Id: NewsState.class.php 4958 2005-04-09 19:58:22Z kiesel $ 
- */
+<?php namespace de\uska\scriptlet\state;
 
-  uses('de.uska.scriptlet.state.UskaState');
+use de\uska\scriptlet\state\UskaState;
+use rdbms\ConnectionManager;
+use util\Date;
+use xml\Node;
+use xml\PCData;
+use xml\XMLFormatException;
+use xml\parser\XMLParser;
+
+/**
+ * Display a news entry.
+ *
+ * @purpose  Display news.
+ */
+class ViewNewsState extends UskaState {
 
   /**
-   * Display a news entry.
+   * Process this state.
    *
-   * @purpose  Display news.
+   * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request
+   * @param   scriptlet.xml.XMLScriptletResponse response
    */
-  class ViewNewsState extends UskaState {
-  
-    /**
-     * Process this state.
-     *
-     * @param   scriptlet.xml.workflow.WorkflowScriptletRequest request
-     * @param   scriptlet.xml.XMLScriptletResponse response
-     */
-    public function process($request, $response) {
-      
-      // Fetch entry
-      $db= ConnectionManager::getInstance()->getByHost('uskanews', 0);
-      $q= $db->query('
-        select 
-          entry.id as id,
-          entry.title as title,
-          entry.body as body,
-          entry.extended as extended,
-          entry.author as author,
-          entry.timestamp as timestamp
-        from
-          serendipity_entries entry
-        where
-          entry.id= %d
-          and isdraft = "false"
-        ',
-        $request->getQueryString()
-      );
+  public function process($request, $response) {
+    
+    // Fetch entry
+    $db= ConnectionManager::getInstance()->getByHost('uskanews', 0);
+    $q= $db->query('
+      select 
+        entry.id as id,
+        entry.title as title,
+        entry.body as body,
+        entry.extended as extended,
+        entry.author as author,
+        entry.timestamp as timestamp
+      from
+        serendipity_entries entry
+      where
+        entry.id= %d
+        and isdraft = "false"
+      ',
+      $request->getQueryString()
+    );
 
-      // Check if we found an entry
-      if (!($record= $q->next())) {
-        $response->addFormError('entry', 'notfound', '*', $request->getQueryString());
-        return;
-      }
+    // Check if we found an entry
+    if (!($record= $q->next())) {
+      $response->addFormError('entry', 'notfound', '*', $request->getQueryString());
+      return;
+    }
+    
+    // Add entry to the formresult
+    with ($entry= $response->addFormResult(new Node('entry'))); {
+      $entry->setAttribute('id', $record['id']);
+      $entry->addChild(new Node('title', $record['title']));
+      $entry->addChild(new Node('author', $record['author']));
+      $entry->addChild(Node::fromObject(new Date($record['timestamp']), 'date'));
       
-      // Add entry to the formresult
-      with ($entry= $response->addFormResult(new Node('entry'))); {
-        $entry->setAttribute('id', $record['id']);
-        $entry->addChild(new Node('title', $record['title']));
-        $entry->addChild(new Node('author', $record['author']));
-        $entry->addChild(Node::fromObject(new Date($record['timestamp']), 'date'));
-        
-        $parser= new XMLParser();
-        try {
-          $body= nl2br(str_replace('&', '&amp;', $record['body']));
-          if ($parser->parse('<body>'.$body.'</body>')) {
-            $entry->addChild(new Node('body', new PCData($body)));
-          }
-          
-          $extended= nl2br(str_replace('&', '&amp;', $record['extended']));
-          if ($parser->parse('<body>'.$extended.'</body>')) {
-            $entry->addChild(new Node('extended', new PCData($extended)));
-          }
-        } catch (XMLFormatException $e) {
-          $response->addFormError('text.xml.XMLParser', 'XMLFormatException', 'body', $e->getMessage());
+      $parser= new XMLParser();
+      try {
+        $body= nl2br(str_replace('&', '&amp;', $record['body']));
+        if ($parser->parse('<body>'.$body.'</body>')) {
+          $entry->addChild(new Node('body', new PCData($body)));
         }
+        
+        $extended= nl2br(str_replace('&', '&amp;', $record['extended']));
+        if ($parser->parse('<body>'.$extended.'</body>')) {
+          $entry->addChild(new Node('extended', new PCData($extended)));
+        }
+      } catch (XMLFormatException $e) {
+        $response->addFormError('text.xml.XMLParser', 'XMLFormatException', 'body', $e->getMessage());
       }
     }
   }
-?>
+}
