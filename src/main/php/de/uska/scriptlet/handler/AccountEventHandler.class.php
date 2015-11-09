@@ -46,39 +46,35 @@ class AccountEventHandler extends Handler {
     
     $event_id= $request->getParam('event_id');
     
-    try {
-      $db= $cm->getByHost('uska', 0);
+    $db= $cm->getByHost('uska', 0);
+
+    $query= $db->query('
+      select
+        p.player_id,
+        p.firstname,
+        p.lastname,
+        e.points
+      from
+        player as p,
+        event_attendee as a left outer join event_points as e
+          on a.player_id= e.player_id
+          and a.event_id= e.event_id
+      where p.player_id= a.player_id
+        and p.player_type_id= 1
+        and a.attend= 1
+        and a.event_id= %d
+      order by p.lastname, p.firstname
+      ',
+      $event_id
+    );
+
+    $players= array();
+    while ($query && $record= $query->next()) {
+      $players[]= $record;
       
-      $query= $db->query('
-        select
-          p.player_id,
-          p.firstname,
-          p.lastname,
-          e.points
-        from
-          player as p,
-          event_attendee as a left outer join event_points as e
-            on a.player_id= e.player_id
-            and a.event_id= e.event_id
-        where p.player_id= a.player_id
-          and p.player_type_id= 1
-          and a.attend= 1
-          and a.event_id= %d
-        order by p.lastname, p.firstname
-        ',
-        $event_id
-      );
-      
-      $players= array();
-      while ($query && $record= $query->next()) {
-        $players[]= $record;
-        
-        if (is_numeric($record['points'])) {
-          $this->setFormValue(sprintf('points[player_%d]', $record['player_id']), $record['points']);
-        }
+      if (is_numeric($record['points'])) {
+        $this->setFormValue(sprintf('points[player_%d]', $record['player_id']), $record['points']);
       }
-    } catch (SQLException $e) {
-      throw($e);
     }
     
     $this->setValue('players', $players);
