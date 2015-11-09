@@ -79,7 +79,7 @@ class EzmlmSqlUtil extends Object {
       $this->database,
       $this->mailinglist
     );
-    $s= array();
+    $s= [];
     while ($q && $r= $q->next('address')) { $s[]= $r; }
     return $s;
   }

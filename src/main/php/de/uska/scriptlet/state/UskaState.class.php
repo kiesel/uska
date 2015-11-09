@@ -67,14 +67,14 @@ class UskaState extends AbstractState {
   public function insertEventCalendar($request, $response, $team= null, $contextDate= null) {
     if (!$contextDate) $contextDate= Date::now();
     
-    $month= $response->addFormResult(new Node('month', null, array(
+    $month= $response->addFormResult(new Node('month', null, [
       'num'   => $contextDate->getMonth(),    // Month number, e.g. 4 = April
       'year'  => $contextDate->getYear(),     // Year
       'days'  => $contextDate->toString('t'), // Number of days in the given month
       'start' => (date('w', mktime(            // Week day of the 1st of the given month
         0, 0, 0, $contextDate->getMonth(), 1, $contextDate->getYear()
       )) + 6) % 7
-    )));
+    ]));
 
     $db= ConnectionManager::getInstance()->getByHost('uska', 0);
     $calendar= $db->query('
@@ -93,9 +93,9 @@ class UskaState extends AbstractState {
     );
     
     while ($record= $calendar->next()) {
-      $month->addChild(new Node('entries', $record['numevents'], array(
+      $month->addChild(new Node('entries', $record['numevents'], [
         'day' => $record['day']
-      )));
+      ]));
     }
   }
 }

@@ -16,7 +16,7 @@ class UskaContext extends Context {
   public
     $user=          null,
     $permissions=   null,
-    $eventtypes=    array();
+    $eventtypes=    [];
   
   /**
    * Set up the context.
@@ -27,12 +27,12 @@ class UskaContext extends Context {
     $cm= ConnectionManager::getInstance();
     $db= $cm->getByHost('uska', 0);
     
-    $this->eventtypes= array();
+    $this->eventtypes= [];
     $q= $db->query('select event_type_id, name, description from event_type');
-    while ($q && $r= $q->next()) { $this->eventtypes[$r['event_type_id']]= array(
+    while ($q && $r= $q->next()) { $this->eventtypes[$r['event_type_id']]= [
       'type'  => $r['name'],
       'name'  => $r['description']
-      );
+      ];
     }
   }
   
@@ -65,10 +65,10 @@ class UskaContext extends Context {
     
     $enode= $response->addFormResult(new Node('eventtypes'));
     foreach ($this->eventtypes as $id => $desc) {
-      $enode->addChild(new Node('type', $desc['name'], array(
+      $enode->addChild(new Node('type', $desc['name'], [
         'id' => $id,
         'type' => $desc['type']
-      )));
+      ]));
     }
   }
   
@@ -151,7 +151,7 @@ class UskaContext extends Context {
       $player->getPlayer_id()
     );
     
-    $cperms= array();
+    $cperms= [];
     foreach ($perms as $p) { $cperms[$p['name']]= true; }
     $this->setPermissions($cperms);
     

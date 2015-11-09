@@ -10,7 +10,7 @@ use text\StringTokenizer;
  */
 class MarkupBuilder extends Object {
   public
-    $patterns= array(
+    $patterns= [
       '#&(?![a-z0-9\#]+;)#',
       '#(^| )_([^_]+)_([ \.,]|$)#', 
       '#(^| )\*([^*]+)\*([ \.,]|$)#',
@@ -18,8 +18,8 @@ class MarkupBuilder extends Object {
       '#(https?://[^\)\s\t\r\n]+)#',
       '#mailto:([^@]+@.+\.[a-z]{2,8})#',
       '#(_|=|-){10,}#'
-    ),
-    $replacements= array(
+    ],
+    $replacements= [
       '&amp;',
       '$1<u>$2</u>$3', 
       '$1<b>$2</b>$3',
@@ -27,7 +27,7 @@ class MarkupBuilder extends Object {
       '<link href="$1"/>',
       '<mailto recipient="$1"/>',
       '<hr/>'
-    );
+    ];
 
   /**
    * Retrieve markup for specified text
@@ -36,7 +36,7 @@ class MarkupBuilder extends Object {
    * @return  string
    */
   public function markupFor($text) {
-    static $nl2br= array("\r" => '', "\n" => "<br/>\n");
+    static $nl2br= ["\r" => '', "\n" => "<br/>\n"];
 
     $patterns= $this->patterns;
     $replacements= $this->replacements;
@@ -51,9 +51,9 @@ class MarkupBuilder extends Object {
         $tag= $st->nextToken('>');
         switch (strtolower($tag)) {
           case 'pre':
-            $translation= array();
-            $patterns= array('#[\s\t]+\n#', '#&(?![a-z0-9\#]+;)#');
-            $replacements= array("\n", '&amp;');
+            $translation= [];
+            $patterns= ['#[\s\t]+\n#', '#&(?![a-z0-9\#]+;)#'];
+            $replacements= ["\n", '&amp;'];
             break;
 
           case '/pre':

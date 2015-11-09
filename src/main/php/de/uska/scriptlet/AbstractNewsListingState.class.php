@@ -54,63 +54,59 @@ abstract class AbstractNewsListingState extends UskaState {
 
     // Retrieve date information
     $contextDate= $this->getContextMonth($request);
-    $month= $response->addFormResult(new Node('month', null, array(
+    $month= $response->addFormResult(new Node('month', null, [
       'num'   => $contextDate->getMonth(),    // Month number, e.g. 4 = April
       'year'  => $contextDate->getYear(),     // Year
       'days'  => $contextDate->toString('t'), // Number of days in the given month
       'start' => (date('w', mktime(            // Week day of the 1st of the given month
         0, 0, 0, $contextDate->getMonth(), 1, $contextDate->getYear()
       )) + 6) % 7
-    )));
+    ]));
 
-    try {
-      $db= ConnectionManager::getInstance()->getByHost('uskanews', 0);
-      
-      // Add all categories to the formresult
-      $n= $response->addFormResult(new Node('categories'));
-      $q= $db->query(
-        'select categoryid, category_name from serendipity_category where parentid= %d',
-        $this->getParentCategory($request)
-      );
-      while ($record= $q->next()) {
-        $n->addChild(new Node('category', $record['category_name'], array(
-          'id' => $record['categoryid']
-        )));
-      }
-      
-      // Fill in all days for which an entry exists
-      $q= $db->query('
-        select 
-          dayofmonth(from_unixtime(entry.timestamp)) as day, 
-          count(*) as numentries
-        from 
-          serendipity_entries entry 
-        where 
-          year(from_unixtime(entry.timestamp)) = %d 
-          and month(from_unixtime(entry.timestamp)) = %d 
-        group by day',
-        $contextDate->getYear(),
-        $contextDate->getMonth()
-      );
-      while ($record= $q->next()) {
-        $month->addChild(new Node('entries', $record['numentries'], array(
-          'day' => $record['day']
-        )));
-      }
-      
-      // Call the getEntries() method (which is overridden by subclasses
-      // and returns the corresponding entries). For perfomance reasons, it
-      // does a join on entries and categories (which have a 1:n 
-      // relationship, so the returned results are not unique)
-      $q= $this->getEntries($db, $request);
-    } catch (SQLException $e) {
-      throw($e);
+    $db= ConnectionManager::getInstance()->getByHost('uskanews', 0);
+
+    // Add all categories to the formresult
+    $n= $response->addFormResult(new Node('categories'));
+    $q= $db->query(
+      'select categoryid, category_name from serendipity_category where parentid= %d',
+      $this->getParentCategory($request)
+    );
+    while ($record= $q->next()) {
+      $n->addChild(new Node('category', $record['category_name'], [
+        'id' => $record['categoryid']
+      ]));
     }
     
+    // Fill in all days for which an entry exists
+    $q= $db->query('
+      select
+        dayofmonth(from_unixtime(entry.timestamp)) as day,
+        count(*) as numentries
+      from
+        serendipity_entries entry
+      where
+        year(from_unixtime(entry.timestamp)) = %d
+        and month(from_unixtime(entry.timestamp)) = %d
+      group by day',
+      $contextDate->getYear(),
+      $contextDate->getMonth()
+    );
+    while ($record= $q->next()) {
+      $month->addChild(new Node('entries', $record['numentries'], [
+        'day' => $record['day']
+      ]));
+    }
+
+    // Call the getEntries() method (which is overridden by subclasses
+    // and returns the corresponding entries). For perfomance reasons, it
+    // does a join on entries and categories (which have a 1:n
+    // relationship, so the returned results are not unique)
+    $q= $this->getEntries($db, $request);
+
     $n= $response->addFormResult(new Node('entries'));
     while ($record= $q->next()) {
       if (!isset($entry[$record['id']])) {
-        $entry[$record['id']]= $n->addChild(new Node('entry', null, array('id' => $record['id'])));
+        $entry[$record['id']]= $n->addChild(new Node('entry', null, ['id' => $record['id']]));
         $entry[$record['id']]->addChild(new Node('title', $record['title']));
         $entry[$record['id']]->addChild(new Node('author', $record['author']));
         $entry[$record['id']]->addChild(new Node('extended_length', $record['extended_length']));
@@ -123,7 +119,7 @@ abstract class AbstractNewsListingState extends UskaState {
       $entry[$record['id']]->addChild(new Node(
         'category', 
         $record['category'], 
-        array('id' => $record['category_id'])
+        ['id' => $record['category_id']]
       ));
     }
     return true;

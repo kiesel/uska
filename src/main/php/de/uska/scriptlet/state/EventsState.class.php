@@ -22,12 +22,12 @@ class EventsState extends UskaState {
    */
   public function process($request, $response, $context) {
     // FIXME: Put into ini-file?
-    static $types= array(
+    static $types= [
       'training'    => 1,
       'tournament'  => 2,
       'misc'        => 3,
       'enbw'        => 4
-    );
+    ];
     parent::process($request, $response, $context);
     
     $team= false;
@@ -76,14 +76,14 @@ class EventsState extends UskaState {
       ($day  ? $db->prepare('and day(e.target_date)= %d', $day) : '')
     );
     
-    $events= $response->addFormResult(new Node('events', null, array(
+    $events= $response->addFormResult(new Node('events', null, [
       'team'  => intval($team),
       'type'  => ($type ? $type : '0'),
       'all'   => intval($all),
       'year'  => intval($year),
       'month' => intval($month),
       'day'   => intval($day)
-    )));
+    ]));
     while ($record= $q->next()) {
       $description= $record['description'];
       unset($record['description']);
