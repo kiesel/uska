@@ -1,0 +1,238 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "22078256f075adcba24305c8ab2d6f84",
+    "packages": [
+        {
+            "name": "xp-framework/core",
+            "version": "v6.5.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-framework/core.git",
+                "reference": "f0c27455f3da923abcdd8340c5a96ec8a27003be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-framework/core/zipball/f0c27455f3da923abcdd8340c5a96ec8a27003be",
+                "reference": "f0c27455f3da923abcdd8340c5a96ec8a27003be",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/__xp.php",
+                    "src/main/resources/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "The XP framework is an all-purpose, object oriented PHP framework.",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "framework",
+                "xp"
+            ],
+            "time": "2015-10-25 16:49:48"
+        },
+        {
+            "name": "xp-framework/http",
+            "version": "v6.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-framework/http.git",
+                "reference": "f1be2a9847705f1ddc7041f20e3f86d350569ce5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-framework/http/zipball/f1be2a9847705f1ddc7041f20e3f86d350569ce5",
+                "reference": "f1be2a9847705f1ddc7041f20e3f86d350569ce5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "xp-framework/core": "~6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "HTTP protocol support for the XP Framework",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2015-09-26 21:32:50"
+        },
+        {
+            "name": "xp-framework/mail",
+            "version": "v6.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-framework/mail.git",
+                "reference": "0051a0e2eb2d1701d89b0e3d77ec5eb46161f916"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-framework/mail/zipball/0051a0e2eb2d1701d89b0e3d77ec5eb46161f916",
+                "reference": "0051a0e2eb2d1701d89b0e3d77ec5eb46161f916",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "xp-framework/core": "~6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Mail for XP",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2015-07-12 18:02:50"
+        },
+        {
+            "name": "xp-framework/rdbms",
+            "version": "v6.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-framework/rdbms.git",
+                "reference": "10b1b518744cb39d81c8cda062e1db39b548838e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-framework/rdbms/zipball/10b1b518744cb39d81c8cda062e1db39b548838e",
+                "reference": "10b1b518744cb39d81c8cda062e1db39b548838e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "xp-framework/core": "~6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "RDBMS support for the XP Framework",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2015-09-26 21:05:07"
+        },
+        {
+            "name": "xp-framework/scriptlet",
+            "version": "v6.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-framework/scriptlet.git",
+                "reference": "4381c1a0779789bd7550c1aabc85c79f0db0a294"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-framework/scriptlet/zipball/4381c1a0779789bd7550c1aabc85c79f0db0a294",
+                "reference": "4381c1a0779789bd7550c1aabc85c79f0db0a294",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "xp-framework/core": "~6.0",
+                "xp-framework/http": "~6.0",
+                "xp-framework/mail": "~6.0",
+                "xp-framework/rdbms": "~6.0",
+                "xp-framework/xml": "~6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Scriptlets for the XP Framework",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2015-07-12 17:27:43"
+        },
+        {
+            "name": "xp-framework/xml",
+            "version": "v6.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xp-framework/xml.git",
+                "reference": "039ad1c76e4195f95319ae54ff4dfcd10fd8f2fd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xp-framework/xml/zipball/039ad1c76e4195f95319ae54ff4dfcd10fd8f2fd",
+                "reference": "039ad1c76e4195f95319ae54ff4dfcd10fd8f2fd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "xp-framework/core": "~6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/main/php/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "XML APIs for the XP Framework",
+            "homepage": "http://xp-framework.net/",
+            "keywords": [
+                "module",
+                "xp"
+            ],
+            "time": "2015-07-12 17:44:21"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

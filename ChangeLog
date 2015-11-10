@@ -4,7 +4,7 @@ $Id$
 
 Version ?.?.?, released ????-??-??
 ----------------------------------
-SVN version: ?????
+* Introduce Composer as dependency mechanism (@kiesel)
 
 Version 2.1.5, released 2010-08-08
 ----------------------------------
